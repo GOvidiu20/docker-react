@@ -8,7 +8,7 @@ function App() {
         <div className="App">
           {/* <CustomWebcam /> */}
         </div>
-        salut pasaadda
+        salut
       </header>
     </div>
   );
