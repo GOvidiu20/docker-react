@@ -11,10 +11,9 @@ const Carousel = () => {
   };
   return (
     <div>
-      <h2> Basic Carousel Component</h2>
       <Slider {...settings}>
         <div>
-          <h3>SLIDE 1</h3>
+          <h3>da</h3>
         </div>
         <div>
           <h3>SLIDE 2</h3>
