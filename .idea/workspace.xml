@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="63b466c8-c417-4d27-9437-25ac20b63e67" name="Changes" comment="git deploy">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/carousel.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/webcam.js" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;GOvidiu20&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="792f64e4-5dc5-48dd-8576-94340880b6eb" />
+        <option name="url" value="https://github.com/GOvidiu20/docker-react.git" />
+      </UrlAndAccount>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2VveHHyh28fsOg4OMd359bE6eV6" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "template__add__camera",
+    "last_opened_file_path": "//wsl$/Ubuntu/home/ovidiu/projects/vinyl-frontend",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "reference.settings.ide.settings.web.browsers",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="63b466c8-c417-4d27-9437-25ac20b63e67" name="Changes" comment="" />
+      <created>1695720891735</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1695720891735</updated>
+      <workItem from="1695720892784" duration="5748000" />
+      <workItem from="1695737828025" duration="4205000" />
+      <workItem from="1695794029642" duration="613000" />
+      <workItem from="1696340924721" duration="231000" />
+      <workItem from="1696341171818" duration="9840000" />
+      <workItem from="1701932075787" duration="983000" />
+    </task>
+    <task id="LOCAL-00001" summary="git deploy">
+      <option name="closed" value="true" />
+      <created>1695721757259</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1695721757259</updated>
+    </task>
+    <task id="LOCAL-00002" summary="git deploy">
+      <option name="closed" value="true" />
+      <created>1695723013368</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1695723013368</updated>
+    </task>
+    <task id="LOCAL-00003" summary="git deploy">
+      <option name="closed" value="true" />
+      <created>1695723165338</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1695723165338</updated>
+    </task>
+    <task id="LOCAL-00004" summary="git deploy">
+      <option name="closed" value="true" />
+      <created>1695724387054</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1695724387054</updated>
+    </task>
+    <task id="LOCAL-00005" summary="git deploy">
+      <option name="closed" value="true" />
+      <created>1695724406436</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1695724406436</updated>
+    </task>
+    <task id="LOCAL-00006" summary="git deploy">
+      <option name="closed" value="true" />
+      <created>1695724462360</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1695724462360</updated>
+    </task>
+    <task id="LOCAL-00007" summary="git deploy">
+      <option name="closed" value="true" />
+      <created>1695724545980</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1695724545980</updated>
+    </task>
+    <task id="LOCAL-00008" summary="git deploy">
+      <option name="closed" value="true" />
+      <created>1695724714668</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1695724714668</updated>
+    </task>
+    <task id="LOCAL-00009" summary="git deploy">
+      <option name="closed" value="true" />
+      <created>1695725138266</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1695725138266</updated>
+    </task>
+    <task id="LOCAL-00010" summary="git deploy">
+      <option name="closed" value="true" />
+      <created>1695725276226</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1695725276226</updated>
+    </task>
+    <task id="LOCAL-00011" summary="git deploy">
+      <option name="closed" value="true" />
+      <created>1695738547476</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1695738547476</updated>
+    </task>
+    <task id="LOCAL-00012" summary="git deploy">
+      <option name="closed" value="true" />
+      <created>1695738838488</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1695738838488</updated>
+    </task>
+    <task id="LOCAL-00013" summary="git deploy">
+      <option name="closed" value="true" />
+      <created>1695739163897</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1695739163897</updated>
+    </task>
+    <task id="LOCAL-00014" summary="git deploy">
+      <option name="closed" value="true" />
+      <created>1695739232978</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1695739232978</updated>
+    </task>
+    <task id="LOCAL-00015" summary="git deploy">
+      <option name="closed" value="true" />
+      <created>1695739430430</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1695739430430</updated>
+    </task>
+    <task id="LOCAL-00016" summary="git deploy">
+      <option name="closed" value="true" />
+      <created>1695742311485</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1695742311485</updated>
+    </task>
+    <task id="LOCAL-00017" summary="git deploy">
+      <option name="closed" value="true" />
+      <created>1695744329431</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1695744329431</updated>
+    </task>
+    <task id="LOCAL-00018" summary="git deploy">
+      <option name="closed" value="true" />
+      <created>1695744445761</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1695744445761</updated>
+    </task>
+    <task id="LOCAL-00019" summary="git deploy">
+      <option name="closed" value="true" />
+      <created>1695745967357</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1695745967357</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="git deploy" />
+    <option name="LAST_COMMIT_MESSAGE" value="git deploy" />
+  </component>
+</project>
