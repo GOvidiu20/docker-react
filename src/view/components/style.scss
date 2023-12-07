@@ -1,0 +1,14 @@
+@import "../../variables.modules";
+.main-container {
+  background-color: $theme-green;
+  max-width: 70%;
+}
+
+.container-max-width {
+  max-width: 60%;
+  margin: 0 auto;
+}
+
+.navbar-color {
+  background-color: #212121;
+}

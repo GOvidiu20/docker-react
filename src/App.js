@@ -1,16 +1,39 @@
 import React from 'react';
+import {
+    BrowserRouter,
+    Routes,
+    Route,
+    Navigate,
+    Outlet
+} from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.module.scss';
-import BaseLayout from "./view/components/BaseLayout.js";
-import {BrowserRouter} from "react-router-dom";
+import Login from "./view/pages/login/login";
+import Home from "./view/pages/home/Home";
+import Register from "./view/pages/register/register";
 
 function App() {
+
     return (
-        <div>
-            <BrowserRouter>
-                <BaseLayout/>
-            </BrowserRouter>
-        </div>
+        <BrowserRouter>
+            <Routes>
+                <Route path="login" element={<Login />} />
+                <Route path="register" element={<Register />} />
+                <Route path="/" element={<Home />} />
+                <Route element={<ProtectedRoute/>}>
+                    <Route path="home" element={<Home />} />
+                    <Route path="playlists" element={<Home />} />
+                    <Route path="recommendations" element={<Home />} />
+                    <Route path="history" element={<Home />} />
+                </Route>
+            </Routes>
+        </BrowserRouter>
     );
 }
 
 export default App;
+
+const ProtectedRoute = () => {
+    const token = sessionStorage.getItem('token') ?? "token";
+    return token ? <Outlet /> : <Navigate to="/login" />;
+};
