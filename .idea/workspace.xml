@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="63b466c8-c417-4d27-9437-25ac20b63e67" name="Changes" comment="git deploy">
-      <change beforePath="$PROJECT_DIR$/src/components/carousel.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/carousel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/carousel.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/webcam.js" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,6 +20,20 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;GOvidiu20&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="792f64e4-5dc5-48dd-8576-94340880b6eb" />
+        <option name="url" value="https://github.com/GOvidiu20/docker-react.git" />
+      </UrlAndAccount>
+    </option>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -35,7 +52,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "template__add__camera",
-    "last_opened_file_path": "//wsl$/Ubuntu/var/www/udemy_course/frontend",
+    "last_opened_file_path": "//wsl$/Ubuntu/home/ovidiu/projects/vinyl-frontend",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -57,7 +74,8 @@
       <workItem from="1695737828025" duration="4205000" />
       <workItem from="1695794029642" duration="613000" />
       <workItem from="1696340924721" duration="231000" />
-      <workItem from="1696341171818" duration="7076000" />
+      <workItem from="1696341171818" duration="9840000" />
+      <workItem from="1701932075787" duration="983000" />
     </task>
     <task id="LOCAL-00001" summary="git deploy">
       <option name="closed" value="true" />
@@ -216,6 +234,17 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="git deploy" />
