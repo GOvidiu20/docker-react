@@ -11,10 +11,10 @@ script:
 deploy:
   provider: elasticbeanstalk
   region: "eu-north-1"
-  app: "react-travis-ci"
-  env: "React-travis-ci-env"
+  app: "vinyl-wade"
+  env: "Vinyl-wade-env"
   bucket_name: "elasticbeanstalk-eu-north-1-589101405141"
-  bucket_path: "react-travis-ci"
+  bucket_path: "vinyl-wade"
   on:
     branch: master
   access_key_id: $AWS_ACCESS_KEY
