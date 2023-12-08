@@ -3,19 +3,25 @@ services:
   - docker
 
 before_install:
-  - docker build -t govidiu/docker-react -f Dockerfile.dev .
+  - docker build -t govidiu20/vinyl-frontend-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true govidiu/docker-react npm run test
+  - docker run -e CI=true govidiu20/vinyl-frontend-test npm run test
 
-deploy:
-  provider: elasticbeanstalk
-  region: "eu-north-1"
-  app: "vinyl-wade"
-  env: "Vinyl-wade-env"
-  bucket_name: "elasticbeanstalk-eu-north-1-589101405141"
-  bucket_path: "vinyl-wade"
-  on:
-    branch: master
-  access_key_id: $AWS_ACCESS_KEY
-  secret_access_key: "$AWS_SECRET_KEY"
+after_success:
+  - docker build -t govidiu20/vinyl-frontend-client ./client
+  - docker build -t govidiu20/vinyl-frontend-nginx ./nginx
+
+
+
+#deploy:
+#  provider: elasticbeanstalk
+#  region: "eu-north-1"
+#  app: "vinyl-wade"
+#  env: "Vinyl-wade-env"
+#  bucket_name: "elasticbeanstalk-eu-north-1-589101405141"
+#  bucket_path: "vinyl-wade"
+#  on:
+#    branch: master
+#  access_key_id: $AWS_ACCESS_KEY
+#  secret_access_key: "$AWS_SECRET_KEY"

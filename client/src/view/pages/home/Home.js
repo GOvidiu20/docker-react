@@ -1,7 +1,6 @@
 import React from 'react';
-import Layout from "../../components/Layout";
 import CustomLayout from "../../components/Layout";
-import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 
 export default function Home() {
 
