@@ -11,6 +11,9 @@ script:
 after_success:
   - docker build -t govidiu20/vinyl-frontend-client ./client
   - docker build -t govidiu20/vinyl-frontend-nginx ./nginx
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" -- password-stdin
+  - docker push govidiu20/vinyl-frontend-client
+  - docker push govidiu20/vinyl-frontend-nginx
 
 
 
