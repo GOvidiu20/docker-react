@@ -11,7 +11,7 @@ script:
 after_success:
   - docker build -t govidiu20/vinyl-frontend-client ./client
   - docker build -t govidiu20/vinyl-frontend-nginx ./nginx
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" -- password-stdin
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   - docker push govidiu20/vinyl-frontend-client
   - docker push govidiu20/vinyl-frontend-nginx
 
@@ -19,7 +19,7 @@ deploy:
   provider: elasticbeanstalk
   region: "eu-north-1"
   app: "vinyl-client"
-  env: "Vinyl-client-env "
+  env: "Vinyl-client-env"
   bucket_name: "elasticbeanstalk-eu-north-1-589101405141"
   bucket_path: "vinyl-wade"
   on:
