@@ -41,7 +41,7 @@ export default function Register() {
                         <h2 className="text-center mb-4">Register</h2>
                         <Form onSubmit={handleRegister}>
                             <Form.Group className="mb-3" controlId="formBasicName">
-                                <Form.Label>Email address</Form.Label>
+                                <Form.Label>Name</Form.Label>
                                 <Form.Control
                                     type="text"
                                     placeholder="Enter name"
