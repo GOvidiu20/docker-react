@@ -15,16 +15,14 @@ after_success:
   - docker push govidiu20/vinyl-frontend-client
   - docker push govidiu20/vinyl-frontend-nginx
 
-
-
-#deploy:
-#  provider: elasticbeanstalk
-#  region: "eu-north-1"
-#  app: "vinyl-wade"
-#  env: "Vinyl-wade-env"
-#  bucket_name: "elasticbeanstalk-eu-north-1-589101405141"
-#  bucket_path: "vinyl-wade"
-#  on:
-#    branch: master
-#  access_key_id: $AWS_ACCESS_KEY
-#  secret_access_key: "$AWS_SECRET_KEY"
+deploy:
+  provider: elasticbeanstalk
+  region: "eu-north-1"
+  app: "vinyl-client"
+  env: "Vinyl-client-env "
+  bucket_name: "elasticbeanstalk-eu-north-1-589101405141"
+  bucket_path: "vinyl-wade"
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY

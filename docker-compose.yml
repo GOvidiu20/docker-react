@@ -2,20 +2,12 @@ version: '3'
 
 services:
   web:
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./client
-    volumes:
-      - /app/node_modules
-      - ./client:/app
+    image: "govidiu20/vinyl-frontend-client"
+    mem_limit: 128m
+    hostname: web
   nginx:
-    restart: always
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./nginx
+    image: "govidiu20/vinyl-frontend-nginx"
+    mem_limit: 128m
+    hostname: nginx
     ports:
-      - '3000:80'
-    depends_on:
-      - web
-    environment:
-      - WDS_SOCKET_PORT=0
+      - "80:80"
