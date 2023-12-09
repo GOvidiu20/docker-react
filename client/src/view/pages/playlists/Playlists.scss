@@ -1,0 +1,10 @@
+@import "../../../variables.modules";
+
+.container-scrollable{
+  background-color: $theme-green;
+  padding-bottom: 10px;
+  height: calc(100vh - 250px);
+}
+::-webkit-scrollbar {
+  display: none;
+}

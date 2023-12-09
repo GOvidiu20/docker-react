@@ -11,6 +11,7 @@ import './App.module.scss';
 import Login from "./view/pages/login/login";
 import Home from "./view/pages/home/Home";
 import Register from "./view/pages/register/register";
+import Playlists from "./view/pages/playlists/playlists";
 
 function App() {
 
@@ -22,7 +23,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route element={<ProtectedRoute/>}>
                     <Route path="home" element={<Home />} />
-                    <Route path="playlists" element={<Home />} />
+                    <Route path="playlists" element={<Playlists />} />
                     <Route path="recommendations" element={<Home />} />
                     <Route path="history" element={<Home />} />
                 </Route>
