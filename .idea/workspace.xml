@@ -5,12 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="63b466c8-c417-4d27-9437-25ac20b63e67" name="Changes" comment="git deploy">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/App.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/App.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/view/pages/home/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/view/pages/home/Home.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/view/pages/home/Home.scss" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/view/pages/home/Home.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/view/pages/playlists/Playlists.scss" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/view/pages/playlists/Playlists.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/view/pages/playlists/playlists.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/view/pages/playlists/playlists.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,8 +82,8 @@
       <recent name="\\wsl$\Ubuntu\home\ovidiu\projects\vinyl-frontend\src\view\components" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="\\wsl$\Ubuntu\home\ovidiu\projects\vinyl-frontend\client\public" />
       <recent name="\\wsl$\Ubuntu\home\ovidiu\projects\vinyl-frontend" />
+      <recent name="\\wsl$\Ubuntu\home\ovidiu\projects\vinyl-frontend\client\public" />
       <recent name="\\wsl$\Ubuntu\home\ovidiu\projects\vinyl-frontend\client" />
       <recent name="\\wsl$\Ubuntu\home\ovidiu\projects\vinyl-frontend\nginx" />
       <recent name="\\wsl$\Ubuntu\home\ovidiu\projects\vinyl-frontend\src\view\pages\login" />
@@ -103,7 +105,8 @@
       <workItem from="1701932075787" duration="983000" />
       <workItem from="1701983893875" duration="53000" />
       <workItem from="1702015462893" duration="29827000" />
-      <workItem from="1702114911465" duration="15226000" />
+      <workItem from="1702114911465" duration="16010000" />
+      <workItem from="1702216648509" duration="20693000" />
     </task>
     <task id="LOCAL-00001" summary="git deploy">
       <option name="closed" value="true" />

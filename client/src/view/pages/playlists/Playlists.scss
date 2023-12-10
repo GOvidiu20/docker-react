@@ -1,9 +1,10 @@
 @import "../../../variables.modules";
 
-.container-scrollable{
-  background-color: $theme-green;
+.container-scrollable-playlists{
+  margin-top: 5px;
+  background-color: rgb(33,33,33);
   padding-bottom: 10px;
-  height: calc(100vh - 250px);
+  max-height: calc(100vh - 200px);
 }
 ::-webkit-scrollbar {
   display: none;
