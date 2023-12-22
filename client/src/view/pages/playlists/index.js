@@ -60,7 +60,6 @@ export default function Playlists() {
                     </IconButton>
                 </div>
             ),
-            button: true,
         },
     ];
     createTheme('datatableTheme', {

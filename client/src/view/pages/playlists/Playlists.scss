@@ -6,6 +6,33 @@
   padding-bottom: 10px;
   max-height: calc(100vh - 200px);
 }
+.container-scrollable-songs{
+  margin-top: 5px;
+  background-color: rgb(33,33,33);
+  padding-bottom: 10px;
+  max-height: calc(100vh - 200px);
+  overflow-x: auto;
+}
 ::-webkit-scrollbar {
   display: none;
+}
+.song-list{
+  color: #a1a1a1;
+  font-size: 15px;
+  font-family: Franie Geometric Sans Famil, serif;
+}
+.button-classic{
+  background-color: #121212;
+  color: white;
+  border: 2px solid #121212;
+  border-radius: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: border-color 0.3s ease-in-out;
+}
+.button-classic:hover{
+  border-color: white;
+}
+.modal-change-name{
+  background-color: #212121;
 }
