@@ -22,7 +22,8 @@ const navbarItems = [
     }
 ]
 function CustomNavbar() {
-    const currentLocation = useLocation()['pathname'];
+    const currentLocation = '/' + useLocation()['pathname'].split('/')[1];
+
     return (
         <Navbar className="navbar-color" variant="dark">
             <Container className="container-max-width">
