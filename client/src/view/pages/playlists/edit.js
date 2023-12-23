@@ -159,48 +159,42 @@ export default function PlaylistChange() {
                     </Row>
                     <Row className="mt-3">
                         <Col>
-                                <DataTable
-                                    title={<span style={{ color: 'white' }}>{ id && playlist ? playlist.title : 'Playlist'} <IconButton color='primary' onClick={() => (setChangeNameModal(true))}><EditIcon/></IconButton></span>}
-                                    columns={columns}
-                                    data={playlistSongs}
-                                    fixedHeader
-                                    theme="datatableTheme"
-                                    conditionalRowStyles={conditionalRowStyles}
-                                />
+                            <DataTable
+                                title={<span style={{ color: 'white' }}>{ id && playlist ? playlist.title : 'Playlist'} <IconButton color='primary' onClick={() => (setChangeNameModal(true))}><EditIcon/></IconButton></span>}
+                                columns={columns}
+                                data={playlistSongs}
+                                fixedHeader
+                                theme="datatableTheme"
+                                conditionalRowStyles={conditionalRowStyles}
+                            />
                         </Col>
                     </Row>
                     <Modal
                         show={changeNameModal}
-                        onClose={() => setChangeNameModal(false)}
-                        size="lg"
-                        // className="modal-change-name"
-                        aria-labelledby="contained-modal-title-vcenter"
+                        onHide={() => setChangeNameModal(false)}
                         centered
                     >
-                        <Modal.Header closeButton>
-                            <Modal.Title id="contained-modal-title-vcenter">
-                                Change name
-                            </Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <Form>
-                                <Form.Group
-                                    className="mb-3"
-                                    controlId="exampleForm.ControlTextarea1"
+                            <Modal.Header className="modal-change-name ">
+                                <Modal.Title>
+                                    <h3 className="fs-3 fw-bold text-light">Edit name</h3>
+                                </Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body className="modal-change-name">
+                                <Paper
+                                    component="form"
+                                    sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 300, background: '#3e3e3e',borderRadius: '5px'}}
                                 >
-                                    <Form.Label>Disease</Form.Label>
-                                    <Form.Control placeholder="Fever" disabled />
-                                    <Form.Label>medicine</Form.Label>
-                                    <Form.Control placeholder="paracetamol" disabled />
-                                    <Form.Label>Prescription</Form.Label>
-                                    <Form.Control placeholder="take one every eight hourst" disabled />
-                                </Form.Group>
-                            </Form>
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <Button variant_type='primary'> Save </Button>
-                            <Button variant_type='danger' onClick={() => (setChangeNameModal(false))}> Close </Button>
-                        </Modal.Footer>
+                                    <InputBase
+                                        sx={{ ml: 1, flex: 1, color:'white' }}
+                                        value = {playlist && playlist.title ? playlist.title : 'Playlist' }
+                                        inputProps={{ 'aria-label': 'Search song...' }}
+                                        // onChange={(e) => handleSearch(e.target.value)}
+                                    />
+                                </Paper>
+                            </Modal.Body>
+                            <Modal.Footer className="modal-change-name">
+                                <Button variant_type='primary'> Save </Button>
+                            </Modal.Footer>
                     </Modal>
                     <Row className='d-flex justify-content-center w-100'>
                         <hr className="h-5 text-secondary mt-2 mb-2 w-100" />
