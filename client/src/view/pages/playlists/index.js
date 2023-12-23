@@ -12,6 +12,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import DataTable, { createTheme } from 'react-data-table-component';
 import './Playlists.scss';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function Playlists() {
     const navigate = useNavigate();
 

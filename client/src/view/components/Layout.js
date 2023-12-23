@@ -3,6 +3,8 @@ import CustomNavbar from './navbar';
 import CustomFooter from './footer';
 import { Container } from 'react-bootstrap';
 import './style.scss'
+import { ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function CustomLayout({ children }) {
     return (
@@ -11,6 +13,7 @@ function CustomLayout({ children }) {
                 <Container className="flex-grow-1 mt-4 main-container">
                     {children}
                 </Container>
+                <ToastContainer />
             <CustomFooter />
         </div>
     );

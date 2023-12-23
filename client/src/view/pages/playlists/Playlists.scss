@@ -17,7 +17,7 @@
   display: none;
 }
 .song-list{
-  color: #a1a1a1;
+  color: #a1a1a1;;
   font-size: 15px;
   font-family: Franie Geometric Sans Famil, serif;
 }
@@ -33,11 +33,30 @@
 .button-classic:hover{
   border-color: white;
 }
-.modal-change-name{
-  background-color: #282828;
+.modal-change-name-header{
+  background-color: #13191e;
+  border: none;
+}
+.modal-change-name-footer{
+  background-color: #13191e;
+  border: none;
+}
+.modal-change-name-body{
+  background-color: #13191e;
   border: none;
 }
 
-.input-color{
-  background-color: #838383;
+.modal-input {
+  color: white;
+  background-color: #13191e;
+  border: 1px solid #a1a1a1;;
+  border-radius: 4px;
+  padding: 8px;
+  margin-top: 4px; /* Optional: Add margin for spacing between label and input */
+}
+
+.modal-label {
+  color: white;
+  display: block; /* Optional: Make the label a block element for better spacing */
+  margin-bottom: 4px; /* Optional: Add margin for spacing between label and input */
 }

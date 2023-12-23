@@ -12,14 +12,22 @@ import InputBase from "@mui/material/InputBase";
 import Paper from "@mui/material/Paper";
 import EditIcon from "@mui/icons-material/Edit";
 import Modal from 'react-bootstrap/Modal';
+import { useNavigate } from "react-router";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function PlaylistChange() {
 
     const [songs, setSongs] = useState([]);
     const [shownSongs, setShownSongs] = useState([]);
-    const [playlist, setPlaylist] = useState(null);
+    const [playlist, setPlaylist] = useState([]);
     const [playlistSongs, setPlaylistSongs] = useState([]);
     const [changeNameModal, setChangeNameModal] = useState(false);
-
+    const [newPlaylistName, setNewPlaylistName] = useState("New Playlist");
+    const [newPlaylistCategory, setNewPlaylistCategory] = useState("New Category");
+    const [errorNewNamePlaylist, setErrorNewNamePlaylist] = useState(false);
+    const [errorNewCategoryPlaylist, setErrorNewCategoryPlaylist] = useState(false);
+    const navigate = useNavigate();
     const id = useParams()['id'];
 
     useEffect(() => {
@@ -36,7 +44,6 @@ export default function PlaylistChange() {
                 .then(response => response.json())
                 .then(data => {
                     setPlaylist(data);
-                    console.log(playlist);
                     setPlaylistSongs(songs.filter(song => data.songIds.includes(song.id)));
                 })
         } catch (error) {
@@ -60,6 +67,11 @@ export default function PlaylistChange() {
     useEffect(() => {
         id && loadPlaylist();
     }, [songs]);
+
+    useEffect(() => {
+        setNewPlaylistName(playlist.title);
+        setNewPlaylistCategory(playlist.category);
+    }, [playlist]);
 
     const columns = [
         {
@@ -128,24 +140,87 @@ export default function PlaylistChange() {
             setShownSongs([]);
     }
 
-    function addSongToPlaylist(id) {
-        const newSongIds = [...playlist.songIds, id];
-        setPlaylist({
-            ...playlist,
-            songIds: newSongIds,
-        });
+    function addSongToPlaylist(songId) {
+        const newSongIds = [...playlistSongs.map(song => song.id), songId];
         setPlaylistSongs(songs.filter(song => newSongIds.includes(song.id)));
+
+        if(id)
+            setPlaylist({
+                ...playlist,
+                songIds: newSongIds,
+            });
     }
     function excludeFromPlaylistSongList(id) {
-        const newSongIds = playlist.songIds.filter(songId => songId !== id);
-        console.log(newSongIds,id);
-        setPlaylist({
-            ...playlist,
-            songIds: newSongIds,
-        });
+        const newSongIds = playlistSongs.map(song => song.id).filter(songId => songId !== id);
         setPlaylistSongs(songs.filter(song => newSongIds.includes(song.id)));
+        if(id)
+            setPlaylist({
+                ...playlist,
+                songIds: newSongIds,
+            });
     }
 
+    function changePlaylistDetails() {
+        setErrorNewNamePlaylist(newPlaylistName.trim() === '');
+        setErrorNewCategoryPlaylist(newPlaylistCategory.trim() === '');
+        if(newPlaylistName.trim() !== '' && newPlaylistCategory.trim() !== '') {
+            setPlaylist({
+                ...playlist,
+                title: newPlaylistName,
+                category: newPlaylistCategory
+            });
+
+            setErrorNewNamePlaylist(false);
+            setErrorNewCategoryPlaylist(false)
+            setChangeNameModal(false);
+        }
+    }
+
+    function onHideModal() {
+        setChangeNameModal(false);
+        if(id) {
+            setNewPlaylistName(playlist.title)
+            setNewPlaylistCategory(playlist.category)
+        } else {
+            setNewPlaylistName("New Playlist")
+            setNewPlaylistCategory("New Category")
+        }
+    }
+    //
+    const changePlaylist = async (e) => {
+
+        const apiUrl = process.env.REACT_APP_BACKEND_SERVER + '/api/playlists';
+        if(!id) {
+            setPlaylist({
+                title: newPlaylistName,
+                category: newPlaylistCategory,
+                songIds: playlistSongs.map(song => song.id),
+                createdById: sessionStorage.getItem('userId')
+            })
+        }
+        console.log(playlist);
+        try {
+            const response = await fetch(apiUrl, {
+                method: id ? 'PUT' : 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                },
+                body: JSON.stringify(
+                    playlist
+                ),
+            });
+            if(response.status === 200) {
+                navigate('/playlists');
+            } else {
+                toast.error("Update playlist failed, please try again later!", {
+                    position: toast.POSITION.TOP_RIGHT,
+                });
+            }
+        } catch (error) {
+            console.error('Error during login:', error);
+        }
+    };
     return (
         <CustomLayout>
             <Container className="mt-2">
@@ -153,17 +228,24 @@ export default function PlaylistChange() {
                     <Row className='d-flex justify-content-center'>
                         <Col xs={12} className="w-50 text-center text-success">
                             {
-                                id ? <h3> Edit Playlist {id}</h3> : <h3>Create Playlist</h3>
+                                id ? <h3>Edit Playlist</h3> : <h3>Create Playlist</h3>
                             }
                         </Col>
                     </Row>
                     <Row className="mt-3">
                         <Col>
                             <DataTable
-                                title={<span style={{ color: 'white' }}>{ id && playlist ? playlist.title : 'Playlist'} <IconButton color='primary' onClick={() => (setChangeNameModal(true))}><EditIcon/></IconButton></span>}
+                                title={<span style={{ color: 'white' }}>{ newPlaylistName } <IconButton color='primary' onClick={() => (setChangeNameModal(true))}><EditIcon/></IconButton></span>}
                                 columns={columns}
                                 data={playlistSongs}
                                 fixedHeader
+                                actions={
+                                    <div className="d-flex">
+                                        <Button className="mx-3" variant="contained" size="small" style={{ backgroundColor: 'white', color: 'black', borderRadius: '30px' }} onClick={() => changePlaylist()}>
+                                            {id ? 'Edit ' : 'Add ' } Playlist
+                                        </Button>
+                                    </div>
+                                }
                                 theme="datatableTheme"
                                 conditionalRowStyles={conditionalRowStyles}
                             />
@@ -171,30 +253,39 @@ export default function PlaylistChange() {
                     </Row>
                     <Modal
                         show={changeNameModal}
-                        onHide={() => setChangeNameModal(false)}
+                        onHide={() => onHideModal()}
                         centered
                     >
-                            <Modal.Header className="modal-change-name ">
-                                <Modal.Title>
-                                    <h3 className="fs-3 fw-bold text-light">Edit name</h3>
-                                </Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body className="modal-change-name">
-                                <Paper
-                                    component="form"
-                                    sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 300, background: '#3e3e3e',borderRadius: '5px'}}
-                                >
-                                    <InputBase
-                                        sx={{ ml: 1, flex: 1, color:'white' }}
-                                        value = {playlist && playlist.title ? playlist.title : 'Playlist' }
-                                        inputProps={{ 'aria-label': 'Search song...' }}
-                                        // onChange={(e) => handleSearch(e.target.value)}
-                                    />
-                                </Paper>
-                            </Modal.Body>
-                            <Modal.Footer className="modal-change-name">
-                                <Button variant_type='primary'> Save </Button>
-                            </Modal.Footer>
+                        <Modal.Header className="modal-change-name-header">
+                            <Modal.Title>
+                                <h3 className="fs-3 fw-bold text-light">Edit details</h3>
+                            </Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body className="modal-change-name-body">
+                            <Form.Group className="mb-3 text-light" controlId="title">
+                                <Form.Label>Name</Form.Label>
+                                <Form.Control
+                                    type = "text"
+                                    value = {newPlaylistName}
+                                    onChange = {(e) => setNewPlaylistName(e.target.value)}
+                                    required
+                                />
+                                {errorNewNamePlaylist && <div className="text-danger">Name is required</div>}
+                            </Form.Group>
+                            <Form.Group className="mb-3 text-light" controlId="category">
+                                <Form.Label>Category</Form.Label>
+                                <Form.Control
+                                    type = "text"
+                                    value = {newPlaylistCategory}
+                                    onChange={(e) => setNewPlaylistCategory(e.target.value)}
+                                    required
+                                />
+                                {errorNewCategoryPlaylist && <div className="text-danger">Category is required</div>}
+                            </Form.Group>
+                        </Modal.Body>
+                        <Modal.Footer className="modal-change-name-footer">
+                            <Button variant_type='primary' onClick={() => changePlaylistDetails()}> Save </Button>
+                        </Modal.Footer>
                     </Modal>
                     <Row className='d-flex justify-content-center w-100'>
                         <hr className="h-5 text-secondary mt-2 mb-2 w-100" />
