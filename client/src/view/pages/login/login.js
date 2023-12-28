@@ -6,11 +6,12 @@ export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
 
-        const apiUrl = process.env.REACT_APP_BACKEND_SERVER+'/login';
+        const apiUrl = process.env.REACT_APP_BACKEND_SERVER + '/login';
 
         try {
             const response = await fetch(apiUrl, {
@@ -22,13 +23,14 @@ export default function Login() {
                     email,
                     password,
                 }),
-            });
+            }).then(data => data.json());
 
-            if (response.token) {
-                sessionStorage.setItem('token', response.token);
+            if (response.jwt) {
+                sessionStorage.setItem('token', response.jwt);
+                sessionStorage.setItem('userId', response.id);
 
                 setError(null);
-                //navigate('/home');
+                navigate('/home');
             } else {
                 setError('Invalid credentials. Please try again.');
             }

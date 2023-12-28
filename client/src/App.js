@@ -11,7 +11,10 @@ import './App.module.scss';
 import Login from "./view/pages/login/login";
 import Home from "./view/pages/home/Home";
 import Register from "./view/pages/register/register";
-import Playlists from "./view/pages/playlists/playlists";
+import Playlists from "./view/pages/playlists/index";
+import PlaylistChange from "./view/pages/playlists/edit";
+import Recommendations from "./view/pages/recommendations";
+import Profile from "./view/pages/profile";
 
 function App() {
 
@@ -23,9 +26,9 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route element={<ProtectedRoute/>}>
                     <Route path="home" element={<Home />} />
-                    <Route path="playlists" element={<Playlists />} />
-                    <Route path="recommendations" element={<Home />} />
-                    <Route path="history" element={<Home />} />
+                    <Route path="playlists/*" element={<PlaylistRoutes />}/>
+                    <Route path="recommendations" element={<Recommendations />} />
+                    <Route path="profile" element={<Profile />} />
                 </Route>
             </Routes>
         </BrowserRouter>
@@ -35,6 +38,17 @@ function App() {
 export default App;
 
 const ProtectedRoute = () => {
-    const token = sessionStorage.getItem('token') ?? "token";
+    const token = sessionStorage.getItem('token');
     return token ? <Outlet /> : <Navigate to="/login" />;
+};
+
+const PlaylistRoutes = () => {
+    return (
+        <Routes>
+            <Route index element={<Playlists />} />
+            <Route path="create" element={<PlaylistChange />} />
+            <Route path=":id" element={<Playlists />} />
+            <Route path=":id/edit" element={<PlaylistChange />} />
+        </Routes>
+    );
 };

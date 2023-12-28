@@ -1,4 +1,5 @@
-import React, { useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import { useNavigate } from "react-router";
 import CustomLayout from "../../components/Layout";
 import { Container, Card} from 'react-bootstrap';
 import Button from '@mui/material/Button';
@@ -9,27 +10,57 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-
 import DataTable, { createTheme } from 'react-data-table-component';
 import './Playlists.scss';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function Playlists() {
-    const [data, setData] = useState([
-        { id: 1, title: 'Song 1', created_by: 'Author1', data_added: '11.08.2023' },
-        { id: 1, title: 'Song 2', created_by: 'Author1', data_added: '11.08.2023' },
-        { id: 1, title: 'Song 3', created_by: 'Author1', data_added: '11.08.2023' },
-        { id: 1, title: 'Song 3', created_by: 'Author1', data_added: '11.08.2023' },
-        { id: 1, title: 'Song 4', created_by: 'Author1', data_added: '11.08.2023' },
-        { id: 1, title: 'Song 5', created_by: 'Author1', data_added: '11.08.2023' },
-        { id: 1, title: 'Song 6', created_by: 'Author1', data_added: '11.08.2023' },
-        { id: 1, title: 'Song 1', created_by: 'Author1', data_added: '11.08.2023' },
-        { id: 1, title: 'Song 1', created_by: 'Author1', data_added: '11.08.2023' },
-        { id: 1, title: 'Song 1', created_by: 'Author1', data_added: '11.08.2023' },
-        { id: 1, title: 'Song 1', created_by: 'Author1', data_added: '11.08.2023' },
-        { id: 1, title: 'Song 1', created_by: 'Author1', data_added: '11.08.2023' },
-        { id: 1, title: 'Song 1', created_by: 'Author1', data_added: '11.08.2023' },
-        { id: 1, title: 'Song 1', created_by: 'Author1', data_added: '11.08.2023' },
-        // Add more data as needed
-    ]);
+    const navigate = useNavigate();
+
+    const [playlists, setPlaylists] = useState([]);
+    useEffect(() => {
+        loadPlaylists();
+    }, []);
+
+    const loadPlaylists = async () => {
+        try {
+            await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/playlists/user/' + sessionStorage.getItem('userId'), {
+                headers: new Headers({
+                    'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                }),
+            })
+                .then(respone => respone.json())
+                .then(data => setPlaylists(data))
+        } catch (error) {
+            console.error('Error fetching playlists:', error);
+        }
+    };
+
+    const deletePlaylist = async (id) => {
+        try {
+            await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/playlists/' + id, {
+                method: 'DELETE',
+                headers: new Headers({
+                    'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                }),
+            })
+                .then(response => {
+                    if(response.status === 200) {
+                        toast.success("Successfully deleted playlist!", {
+                            position: toast.POSITION.TOP_RIGHT,
+                        });
+                        setPlaylists(playlists.filter(playlist => playlist.id !== id))
+                    }
+                    else
+                        toast.error("Delete playlist failed, please try again later!", {
+                            position: toast.POSITION.TOP_RIGHT,
+                        });
+                })
+        } catch (error) {
+            console.error('Error fetching playlists:', error);
+        }
+    }
+
     const columns = [
         {
             name: 'Title',
@@ -37,26 +68,25 @@ export default function Playlists() {
         },
         {
             name: 'Author',
-            selector: row => row.created_by,
+            selector: row => row.createdById,
         },
         {
             name: 'Added date',
-            selector: row => row.data_added,
+            selector: row => row.category,
             sortable: 'true'
         },
         {
             name: 'Actions',
-            cell: () => (
+            cell: (row) => (
                 <div>
-                    <IconButton aria-label="delete" color="error">
+                    <IconButton aria-label="delete" color="error" onClick={() => deletePlaylist(row.id)}>
                         <DeleteIcon/>
                     </IconButton>
-                    <IconButton aria-label="delete" color="primary">
+                    <IconButton aria-label="delete" color="primary" onClick={() => navigate(`/playlists/${row.id}/edit`)}>
                         <EditIcon/>
                     </IconButton>
                 </div>
             ),
-            button: true,
         },
     ];
     createTheme('datatableTheme', {
@@ -96,7 +126,7 @@ export default function Playlists() {
     ];
     const [filterText, setFilterText] = useState('');
 
-    const filteredData = data.filter((row) =>
+    const filteredData = playlists && playlists.filter((row) =>
         Object.values(row).some(
             (value) =>
                 value && value.toString().toLowerCase().includes(filterText.toLowerCase())
@@ -104,7 +134,7 @@ export default function Playlists() {
     );
     const actions = (
         <div className="d-flex">
-            <Button className="mx-3" variant="contained" size="small" style={{ backgroundColor: 'white', color: 'black', borderRadius: '30px' }} startIcon={<Add />}>
+            <Button className="mx-3" variant="contained" size="small" style={{ backgroundColor: 'white', color: 'black', borderRadius: '30px' }} startIcon={<Add />} onClick={() => navigate(`/playlists/create`)}>
                 Add Playlist
             </Button>
             <Paper
@@ -128,6 +158,7 @@ export default function Playlists() {
         <CustomLayout>
             <Container>
                 <Card className="container-scrollable-playlists border-0">
+                    { filteredData &&
                     <DataTable
                         title={<span style={{ color: 'white' }}>My Playlists</span>}
                         columns={columns}
@@ -137,6 +168,7 @@ export default function Playlists() {
                         theme="datatableTheme"
                         conditionalRowStyles={conditionalRowStyles}
                     />
+                    }
                 </Card>
             </Container>
         </CustomLayout>
