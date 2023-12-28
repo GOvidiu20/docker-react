@@ -23,8 +23,8 @@ export default function PlaylistChange() {
     const [playlist, setPlaylist] = useState([]);
     const [playlistSongs, setPlaylistSongs] = useState([]);
     const [changeNameModal, setChangeNameModal] = useState(false);
-    const [newPlaylistName, setNewPlaylistName] = useState("New Playlist");
-    const [newPlaylistCategory, setNewPlaylistCategory] = useState("New Category");
+    const [newPlaylistName, setNewPlaylistName] = useState();
+    const [newPlaylistCategory, setNewPlaylistCategory] = useState();
     const [errorNewNamePlaylist, setErrorNewNamePlaylist] = useState(false);
     const [errorNewCategoryPlaylist, setErrorNewCategoryPlaylist] = useState(false);
     const navigate = useNavigate();
@@ -65,7 +65,12 @@ export default function PlaylistChange() {
     };
 
     useEffect(() => {
-        id && loadPlaylist();
+        if(id)
+            loadPlaylist();
+        else {
+            setNewPlaylistName("New Playlist");
+            setNewPlaylistCategory("New Category");
+        }
     }, [songs]);
 
     useEffect(() => {
@@ -189,16 +194,11 @@ export default function PlaylistChange() {
     //
     const changePlaylist = async (e) => {
 
-        const apiUrl = process.env.REACT_APP_BACKEND_SERVER + '/api/playlists';
-        if(!id) {
-            setPlaylist({
-                title: newPlaylistName,
-                category: newPlaylistCategory,
-                songIds: playlistSongs.map(song => song.id),
-                createdById: sessionStorage.getItem('userId')
-            })
-        }
-        console.log(playlist);
+        const apiUrl = id
+                        ? process.env.REACT_APP_BACKEND_SERVER + '/api/playlists/' + id
+                        : process.env.REACT_APP_BACKEND_SERVER + '/api/playlists'
+                        ;
+
         try {
             const response = await fetch(apiUrl, {
                 method: id ? 'PUT' : 'POST',
@@ -207,7 +207,14 @@ export default function PlaylistChange() {
                     'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
                 },
                 body: JSON.stringify(
-                    playlist
+                    id
+                        ? playlist
+                        : {
+                            title: newPlaylistName,
+                            category: newPlaylistCategory,
+                            songIds: playlistSongs.map(song => song.id),
+                            createdById: sessionStorage.getItem('userId')
+                        }
                 ),
             });
             if(response.status === 200) {

@@ -1,7 +1,8 @@
 import React from 'react';
-import { Navbar, Nav, Container } from 'react-bootstrap';
-import { useLocation } from 'react-router-dom'
+import {Navbar, Nav, Container, NavDropdown} from 'react-bootstrap';
+import { useLocation, useNavigate } from 'react-router-dom'
 import './style.scss'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const navbarItems = [
     {
@@ -16,13 +17,14 @@ const navbarItems = [
         name: 'Recommendations',
         pathname: '/recommendations'
     },
-    {
-        name: 'History',
-        pathname: '/history'
-    }
 ]
 function CustomNavbar() {
     const currentLocation = '/' + useLocation()['pathname'].split('/')[1];
+    const navigate = useNavigate();
+    function signOut() {
+        sessionStorage.clear();
+        navigate('/login');
+    }
 
     return (
         <Navbar className="navbar-color" variant="dark">
@@ -35,6 +37,13 @@ function CustomNavbar() {
                             </Nav.Link>
                         ))
                     }
+                    <NavDropdown title={<AccountCircleIcon fontSize="large"/>} id="avatar-dropdown">
+                        <NavDropdown.Item href="/profile">View Profile</NavDropdown.Item>
+                        <NavDropdown.Divider />
+                        <NavDropdown.Item onClick={ () => signOut()}>
+                            Log out
+                        </NavDropdown.Item>
+                    </NavDropdown>
                 </Nav>
             </Container>
         </Navbar>

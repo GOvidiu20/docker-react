@@ -17,7 +17,7 @@ import 'react-toastify/dist/ReactToastify.css';
 export default function Playlists() {
     const navigate = useNavigate();
 
-    const [playlists, setPlaylists] = useState();
+    const [playlists, setPlaylists] = useState([]);
     useEffect(() => {
         loadPlaylists();
     }, []);
@@ -35,6 +35,31 @@ export default function Playlists() {
             console.error('Error fetching playlists:', error);
         }
     };
+
+    const deletePlaylist = async (id) => {
+        try {
+            await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/playlists/' + id, {
+                method: 'DELETE',
+                headers: new Headers({
+                    'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                }),
+            })
+                .then(response => {
+                    if(response.status === 200) {
+                        toast.success("Successfully deleted playlist!", {
+                            position: toast.POSITION.TOP_RIGHT,
+                        });
+                        setPlaylists(playlists.filter(playlist => playlist.id !== id))
+                    }
+                    else
+                        toast.error("Delete playlist failed, please try again later!", {
+                            position: toast.POSITION.TOP_RIGHT,
+                        });
+                })
+        } catch (error) {
+            console.error('Error fetching playlists:', error);
+        }
+    }
 
     const columns = [
         {
@@ -54,7 +79,7 @@ export default function Playlists() {
             name: 'Actions',
             cell: (row) => (
                 <div>
-                    <IconButton aria-label="delete" color="error">
+                    <IconButton aria-label="delete" color="error" onClick={() => deletePlaylist(row.id)}>
                         <DeleteIcon/>
                     </IconButton>
                     <IconButton aria-label="delete" color="primary" onClick={() => navigate(`/playlists/${row.id}/edit`)}>

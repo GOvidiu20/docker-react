@@ -13,6 +13,8 @@ import Home from "./view/pages/home/Home";
 import Register from "./view/pages/register/register";
 import Playlists from "./view/pages/playlists/index";
 import PlaylistChange from "./view/pages/playlists/edit";
+import Recommendations from "./view/pages/recommendations";
+import Profile from "./view/pages/profile";
 
 function App() {
 
@@ -25,8 +27,8 @@ function App() {
                 <Route element={<ProtectedRoute/>}>
                     <Route path="home" element={<Home />} />
                     <Route path="playlists/*" element={<PlaylistRoutes />}/>
-                    <Route path="recommendations" element={<Home />} />
-                    <Route path="history" element={<Home />} />
+                    <Route path="recommendations" element={<Recommendations />} />
+                    <Route path="profile" element={<Profile />} />
                 </Route>
             </Routes>
         </BrowserRouter>
