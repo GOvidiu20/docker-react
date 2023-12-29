@@ -14,6 +14,11 @@ import DataTable, { createTheme } from 'react-data-table-component';
 import './Playlists.scss';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Moment from "moment/moment";
+import Swal from 'sweetalert2/dist/sweetalert2.js';
+
+
+
 export default function Playlists() {
     const navigate = useNavigate();
 
@@ -30,35 +35,52 @@ export default function Playlists() {
                 }),
             })
                 .then(respone => respone.json())
-                .then(data => setPlaylists(data))
+                .then(data => {setPlaylists(data);console.log(data);})
         } catch (error) {
             console.error('Error fetching playlists:', error);
         }
     };
 
     const deletePlaylist = async (id) => {
-        try {
-            await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/playlists/' + id, {
-                method: 'DELETE',
-                headers: new Headers({
-                    'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
-                }),
-            })
-                .then(response => {
-                    if(response.status === 200) {
-                        toast.success("Successfully deleted playlist!", {
-                            position: toast.POSITION.TOP_RIGHT,
-                        });
-                        setPlaylists(playlists.filter(playlist => playlist.id !== id))
-                    }
-                    else
-                        toast.error("Delete playlist failed, please try again later!", {
-                            position: toast.POSITION.TOP_RIGHT,
-                        });
-                })
-        } catch (error) {
-            console.error('Error fetching playlists:', error);
-        }
+        Swal.fire({
+            title: "Are you sure you want to delete this?",
+            text: "You won't be able to revert this!",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/playlists/' + id + '/' + sessionStorage.getItem('userId'), {
+                        method: 'DELETE',
+                        headers: new Headers({
+                            'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                        }),
+                    })
+                        .then(response => {
+                            if (response.status === 200) {
+                                setPlaylists(playlists.filter(playlist => playlist.id !== id))
+                                Swal.fire({
+                                    title: "Deleted!",
+                                    text: "Playlist has been deleted.",
+                                    icon: "success"
+                                });
+                            } else
+                                Swal.fire({
+                                    title: "Error!",
+                                    text: "Error when deleting the playlist.",
+                                    icon: "error"
+                                });
+                        })
+                } catch (error) {
+                    console.error('Error fetching playlists:', error);
+                }
+
+            }
+        });
+
     }
 
     const columns = [
@@ -72,7 +94,7 @@ export default function Playlists() {
         },
         {
             name: 'Added date',
-            selector: row => row.category,
+            selector: row => Moment(row.createdDate).format('d MMM Y'),
             sortable: 'true'
         },
         {

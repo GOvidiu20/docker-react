@@ -2,6 +2,9 @@ import React, {useEffect, useState} from 'react';
 import CustomLayout from "../../components/Layout";
 import {Container, Row, Col, Card} from 'react-bootstrap';
 import './profile.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpotify } from '@fortawesome/free-brands-svg-icons';
+
 
 export default function Profile() {
 
@@ -51,7 +54,7 @@ export default function Profile() {
                                    Connect to spotify
                                </Card.Title>
                                <Card.Text className="text-secondary">
-                                   SPOTIFY
+                                   <FontAwesomeIcon icon={faSpotify} />
                                </Card.Text>
                            </Card.Body>
                        </Card>

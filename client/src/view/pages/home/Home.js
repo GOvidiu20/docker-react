@@ -32,6 +32,7 @@ export default function Home() {
                 .then(data => {
                     setSongs(data);
                     setShownSongs(data);
+                    console.log(data);
                 })
         } catch (error) {
             console.error('Error fetching songs:', error);
@@ -62,7 +63,7 @@ export default function Home() {
     };
 
     const addSongToPlaylist = async (e) => {
-        const apiUrl = process.env.REACT_APP_BACKEND_SERVER + '/api/playlists/' + selectedPlaylistOption.value + '/songs/' + selectedSong.id;
+        const apiUrl = process.env.REACT_APP_BACKEND_SERVER + '/api/playlists/' + selectedPlaylistOption.value + '/songs/' + selectedSong.id + '/user/' + sessionStorage.getItem('userId');
 
         try {
             const response = await fetch(apiUrl, {
