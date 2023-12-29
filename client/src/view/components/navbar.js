@@ -22,7 +22,7 @@ function CustomNavbar() {
     const currentLocation = '/' + useLocation()['pathname'].split('/')[1];
     const navigate = useNavigate();
     function signOut() {
-        sessionStorage.clear();
+        localStorage.clear();
         navigate('/login');
     }
 

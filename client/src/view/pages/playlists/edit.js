@@ -40,7 +40,7 @@ export default function PlaylistChange() {
         try {
             await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/playlists/' + id, {
                 headers: new Headers({
-                    'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 }),
             })
                 .then(response => response.json())
@@ -56,7 +56,7 @@ export default function PlaylistChange() {
         try {
             await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/songs', {
                 headers: new Headers({
-                    'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 }),
             })
                 .then(response => response.json())
@@ -198,7 +198,7 @@ export default function PlaylistChange() {
 
         setLoadingButton(true);
         const apiUrl = id
-                        ? process.env.REACT_APP_BACKEND_SERVER + '/api/playlists/' + id + '/' + sessionStorage.getItem('userId')
+                        ? process.env.REACT_APP_BACKEND_SERVER + '/api/playlists/' + id + '/' + localStorage.getItem('userId')
                         : process.env.REACT_APP_BACKEND_SERVER + '/api/playlists'
                         ;
 
@@ -207,7 +207,7 @@ export default function PlaylistChange() {
                 method: id ? 'PUT' : 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 },
                 body: JSON.stringify(
                     id
@@ -216,7 +216,7 @@ export default function PlaylistChange() {
                             title: newPlaylistName,
                             category: newPlaylistCategory,
                             songIds: playlistSongs.map(song => song.id),
-                            userIds: [sessionStorage.getItem('userId')],
+                            userIds: [localStorage.getItem('userId')],
                             createdDate: moment(),
                         }
                 ),

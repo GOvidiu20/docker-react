@@ -25,7 +25,7 @@ export default function Register() {
             });
 
             if (response.token) {
-                sessionStorage.setItem('token', response.token);
+                localStorage.setItem('token', response.token);
                 //navigate('/home');
             }
         } catch (error) {

@@ -12,12 +12,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import DataTable, { createTheme } from 'react-data-table-component';
 import './Playlists.scss';
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Moment from "moment/moment";
 import Swal from 'sweetalert2/dist/sweetalert2.js';
-
-
 
 export default function Playlists() {
     const navigate = useNavigate();
@@ -29,13 +26,13 @@ export default function Playlists() {
 
     const loadPlaylists = async () => {
         try {
-            await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/playlists/user/' + sessionStorage.getItem('userId'), {
+            await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/playlists/user/' + localStorage.getItem('userId'), {
                 headers: new Headers({
-                    'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 }),
             })
                 .then(respone => respone.json())
-                .then(data => {setPlaylists(data);console.log(data);})
+                .then(data => setPlaylists(data))
         } catch (error) {
             console.error('Error fetching playlists:', error);
         }
@@ -53,10 +50,10 @@ export default function Playlists() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/playlists/' + id + '/' + sessionStorage.getItem('userId'), {
+                    await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/playlists/' + id + '/' + localStorage.getItem('userId'), {
                         method: 'DELETE',
                         headers: new Headers({
-                            'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                            'Authorization': 'Bearer ' + localStorage.getItem('token'),
                         }),
                     })
                         .then(response => {

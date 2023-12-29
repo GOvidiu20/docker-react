@@ -25,14 +25,13 @@ export default function Home() {
         try {
             await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/songs', {
                 headers: new Headers({
-                    'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 }),
             })
                 .then(response => response.json())
                 .then(data => {
                     setSongs(data);
                     setShownSongs(data);
-                    console.log(data);
                 })
         } catch (error) {
             console.error('Error fetching songs:', error);
@@ -40,9 +39,9 @@ export default function Home() {
     };
     const loadPlaylists = async () => {
         try {
-            await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/playlists/user/' + sessionStorage.getItem('userId'), {
+            await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/playlists/user/' + localStorage.getItem('userId'), {
                 headers: new Headers({
-                    'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 }),
             })
                 .then(respone => respone.json())
@@ -63,14 +62,14 @@ export default function Home() {
     };
 
     const addSongToPlaylist = async (e) => {
-        const apiUrl = process.env.REACT_APP_BACKEND_SERVER + '/api/playlists/' + selectedPlaylistOption.value + '/songs/' + selectedSong.id + '/user/' + sessionStorage.getItem('userId');
+        const apiUrl = process.env.REACT_APP_BACKEND_SERVER + '/api/playlists/' + selectedPlaylistOption.value + '/songs/' + selectedSong.id + '/user/' + localStorage.getItem('userId');
 
         try {
             const response = await fetch(apiUrl, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 },
             });
             if(response.status === 200) {

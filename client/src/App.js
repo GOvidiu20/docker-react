@@ -38,7 +38,7 @@ function App() {
 export default App;
 
 const ProtectedRoute = () => {
-    const token = sessionStorage.getItem('token');
+    const token = localStorage.getItem('token');
     return token ? <Outlet /> : <Navigate to="/login" />;
 };
 
