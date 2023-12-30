@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import CustomLayout from "../../components/Layout";
-import {Container, Row, Col, Button} from 'react-bootstrap';
+import {Container, Row, Col, Button, Card} from 'react-bootstrap';
 import './recommendation.scss';
+import {forEach} from "react-bootstrap/ElementChildren";
 
 export default function Recommendations() {
 
     const [songs, setSongs] = useState([]);
     const [playlists, setPlaylists] = useState([]);
+    const [topSpotifySongs, setTopSpotifySongs] = useState()
 
     useEffect(() => {
         // loadSongs();
@@ -58,9 +60,9 @@ export default function Recommendations() {
                     'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 }),
             })
-                .then(response => {response.json();console.log(response)})
+                .then(response => response.json())
                 .then(data => {
-                    console.log(data);
+                    setTopSpotifySongs(data);
                 })
         } catch (error) {
             console.error('Error fetching user:', error);
@@ -80,26 +82,35 @@ export default function Recommendations() {
                        <Button>Find</Button>
                    </Col>
                </Row>
-                   {/*{songs.map((song, index) => (*/}
-                   {/*    <Col key={song.id} xs={12} sm={12} md={4} lg={3} xl={2} className="mb-3">*/}
-                   {/*            <Card className="vinyl-cart">*/}
-                   {/*                <Card.Img src="https://newjams-images.scdn.co/image/ab67647800003f8a/dt/v3/release-radar/ab6761610000e5eb6cab9e007b77913d63f12835/en" />*/}
-                   {/*                <Card.Body>*/}
-                   {/*                    <Card.Title className="text-light text-cart-title">*/}
-                   {/*                        {song.title.length > 15 ? song.title.slice(0, 15) + '...' : song.title}*/}
-                   {/*                    </Card.Title>*/}
-                   {/*                    <Card.Text className="text-secondary text-cart-body">*/}
-                   {/*                        Author*/}
-                   {/*                    </Card.Text>*/}
-                   {/*                </Card.Body>*/}
-                   {/*            </Card>*/}
-                   {/*    </Col>*/}
-                   {/*))}*/}
                <Row className='d-flex justify-content-center w-100 mt-3 mb-3'>
                    <hr className="h-5 text-secondary mt-2 mb-2 w-100" />
                </Row>
                <Row>
                    <h1 className="fs-3 fw-bold text-light mb-2 mx-3">Spotify Recommendations</h1>
+
+                   {
+                       topSpotifySongs &&
+                       topSpotifySongs.map((song, index) => (
+                       <Col key={song.id} xs={12} sm={12} md={4} lg={3} xl={2} className="mb-3">
+                               <Card className="vinyl-card-recommendations">
+                                   <Card.Img src={song.album.images[1].url} />
+                                   <Card.Body>
+                                       <Card.Title className="text-light text-cart-title">
+                                           <a href={song.externalUrls.externalUrls.spotify}>
+                                               {song.title.length > 15 ? song.name.slice(0, 15) + '...' : song.title}
+                                           </a>
+                                       </Card.Title>
+                                       <Card.Text className="text-secondary text-cart-body">
+                                           {
+                                               song.artists.map((artist, index) => (
+                                                   index === song.artists.length ? artist.name : artist.name + ', '
+                                               ))
+                                           }
+                                       </Card.Text>
+                                   </Card.Body>
+                               </Card>
+                       </Col>
+                   ))}
                </Row>
                <Row>
                </Row>
