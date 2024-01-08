@@ -119,7 +119,7 @@ export default function Home() {
                    {
                        shownSongs.length !== 0 ?
                            shownSongs.map((song, index) => (
-                           <Col key={song.id} xs={12} sm={12} md={4} lg={3} xl={2} className="mb-3">
+                           <Col key={song.id} xs={12} sm={12} md={4} lg={3} xl={2} className="mb-3 d-flex">
                                <Button className="p-0 border-0" onClick={() => selectSongButton(song)}>
                                    <Card className="vinyl-cart">
                                        <MoreVertIcon className="button-card" sx={{ color: '#1ed760' }} fontSize="large"/>

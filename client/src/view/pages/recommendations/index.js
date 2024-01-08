@@ -8,12 +8,17 @@ export default function Recommendations() {
 
     const [songs, setSongs] = useState([]);
     const [playlists, setPlaylists] = useState([]);
-    const [topSpotifySongs, setTopSpotifySongs] = useState()
+    const [topSpotifySongs, setTopSpotifySongs] = useState([])
+    const [topSpotifyArtists, setTopSpotifyArtists] = useState([])
+    const [spotifySavedAlbums, setSpotifySavedAlbums] = useState([])
 
     useEffect(() => {
         // loadSongs();
         // loadPlaylists();
-        loadSpotifyRecommendations();
+        loadTopSpotifySongs();
+        loadTopSpotifyArtists();
+        loadSpotifySavedAlbums();
+        verifyUserTokenAvailability();
     }, []);
 
     const loadSongs = async () => {
@@ -53,17 +58,77 @@ export default function Recommendations() {
         }
     };
 
-    async function loadSpotifyRecommendations(){
+    async function loadTopSpotifySongs(){
         try {
-            await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/spotify/userTopSongs?userId=' + localStorage.getItem('userId'), {
-                headers: new Headers({
-                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
-                }),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    setTopSpotifySongs(data);
+                await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/spotify/userTopSongs?userId=' + localStorage.getItem('userId'), {
+                    headers: new Headers({
+                        'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                    }),
                 })
+                    .then(response => response.json())
+                    .then(data => {
+                        if(data.length !== 0) {
+                            setTopSpotifySongs(data);
+                            localStorage.setItem("songs", JSON.stringify(data));
+                        }
+                        else
+                            setTopSpotifySongs(localStorage.getItem('songs'));
+                    })
+        } catch (error) {
+            console.error('Error fetching user:', error);
+        }
+    }
+    async function loadTopSpotifyArtists(){
+        try {
+                await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/spotify/userTopArtists?userId=' + localStorage.getItem('userId'), {
+                    headers: new Headers({
+                        'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if(data.length !== 0) {
+                            setTopSpotifyArtists(data);
+                            localStorage.setItem("artists", JSON.stringify(data));
+                        }
+                        else
+                            setTopSpotifyArtists(localStorage.getItem('artists'));
+                    })
+        } catch (error) {
+            console.error('Error fetching user:', error);
+        }
+    }
+    async function loadSpotifySavedAlbums(){
+        try {
+                await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/spotify/userSavedAlbum?userId=' + localStorage.getItem('userId'), {
+                    headers: new Headers({
+                        'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if(data.length !== 0) {
+                            setSpotifySavedAlbums(data);
+                            localStorage.setItem("albums", JSON.stringify(data));
+                        }
+                        else
+                            setSpotifySavedAlbums(localStorage.getItem('albums'));
+                    })
+        } catch (error) {
+            console.error('Error fetching user:', error);
+        }
+    }
+    async function verifyUserTokenAvailability(){
+        try {
+                await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/spotify/verify?userId=' + localStorage.getItem('userId'), {
+                    headers: new Headers({
+                        'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                    })
         } catch (error) {
             console.error('Error fetching user:', error);
         }
@@ -91,13 +156,13 @@ export default function Recommendations() {
                    {
                        topSpotifySongs &&
                        topSpotifySongs.map((song, index) => (
-                       <Col key={song.id} xs={12} sm={12} md={4} lg={3} xl={2} className="mb-3">
+                       <Col key={song.id} xs={12} sm={6} md={4} lg={3} xl={2} className="mb-3 d-flex">
                                <Card className="vinyl-card-recommendations">
                                    <Card.Img src={song.album.images[1].url} />
                                    <Card.Body>
                                        <Card.Title className="text-light text-cart-title">
                                            <a href={song.externalUrls.externalUrls.spotify}>
-                                               {song.title.length > 15 ? song.name.slice(0, 15) + '...' : song.title}
+                                               {song.name}
                                            </a>
                                        </Card.Title>
                                        <Card.Text className="text-secondary text-cart-body">
