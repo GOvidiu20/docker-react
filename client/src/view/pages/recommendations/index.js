@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import CustomLayout from "../../components/Layout";
-import {Container, Row, Col, Button, Card} from 'react-bootstrap';
+import {Container, Row, Col, Button, Card, Tab, Tabs} from 'react-bootstrap';
 import './recommendation.scss';
-import {forEach} from "react-bootstrap/ElementChildren";
 
 export default function Recommendations() {
 
@@ -15,9 +14,9 @@ export default function Recommendations() {
     useEffect(() => {
         // loadSongs();
         // loadPlaylists();
-        loadTopSpotifySongs();
-        loadTopSpotifyArtists();
         loadSpotifySavedAlbums();
+        loadTopSpotifyArtists();
+        loadTopSpotifySongs();
         verifyUserTokenAvailability();
     }, []);
 
@@ -71,8 +70,9 @@ export default function Recommendations() {
                             setTopSpotifySongs(data);
                             localStorage.setItem("songs", JSON.stringify(data));
                         }
-                        else
-                            setTopSpotifySongs(localStorage.getItem('songs'));
+                        else {
+                            setTopSpotifySongs(JSON.parse(localStorage.getItem('songs')));
+                        }
                     })
         } catch (error) {
             console.error('Error fetching user:', error);
@@ -92,7 +92,7 @@ export default function Recommendations() {
                             localStorage.setItem("artists", JSON.stringify(data));
                         }
                         else
-                            setTopSpotifyArtists(localStorage.getItem('artists'));
+                            setTopSpotifyArtists(JSON.parse(localStorage.getItem('artists')));
                     })
         } catch (error) {
             console.error('Error fetching user:', error);
@@ -139,48 +139,84 @@ export default function Recommendations() {
 
     return (
        <CustomLayout>
-           <Container className="mt-5 container-scrollable">
-               <Row className='d-flex justify-content-start'>
-                   <Col xs={12} className="d-flex w-50">
-                       <input type="text" className="form-control rounded mx-3" placeholder="Find vinyls by your tastes(I love/hate rock...)"
-                              onChange={(e) => handleSearch(e.target.value)}/>
-                       <Button>Find</Button>
-                   </Col>
-               </Row>
-               <Row className='d-flex justify-content-center w-100 mt-3 mb-3'>
-                   <hr className="h-5 text-secondary mt-2 mb-2 w-100" />
-               </Row>
-               <Row>
-                   <h1 className="fs-3 fw-bold text-light mb-2 mx-3">Spotify Recommendations</h1>
+           <Container className="mt-3 container-scrollable-recommender">
+               <Tabs
+                   defaultActiveKey="preferences"
+                   id="justify-tab-example"
+                   className="mb-4 recommendation-tab"
+                   variant="underline"
+               >
+                   <Tab eventKey="preferences" title="Your Preferences">
+                       <Row className='d-flex justify-content-center'>
+                           <Col xs={12} className="d-flex w-50">
+                               <input type="text" className="form-control rounded mx-3" placeholder="Find vinyls by your tastes(I love/hate rock...)"
+                                      onChange={(e) => handleSearch(e.target.value)}/>
+                               <Button>Find</Button>
+                           </Col>
+                       </Row>
+                   </Tab>
+                   <Tab eventKey="profile" title="Spotify Recommendations">
+                       <h1 className="fs-3 fw-bold text-light mb-2 mx-3">Favorites songs</h1>
 
-                   {
-                       topSpotifySongs &&
-                       topSpotifySongs.map((song, index) => (
-                       <Col key={song.id} xs={12} sm={6} md={4} lg={3} xl={2} className="mb-3 d-flex">
-                               <Card className="vinyl-card-recommendations">
-                                   <Card.Img src={song.album.images[1].url} />
-                                   <Card.Body>
-                                       <Card.Title className="text-light text-cart-title">
-                                           <a href={song.externalUrls.externalUrls.spotify}>
-                                               {song.name}
-                                           </a>
-                                       </Card.Title>
-                                       <Card.Text className="text-secondary text-cart-body">
-                                           {
-                                               song.artists.map((artist, index) => (
-                                                   index === song.artists.length ? artist.name : artist.name + ', '
-                                               ))
-                                           }
-                                       </Card.Text>
-                                   </Card.Body>
-                               </Card>
-                       </Col>
-                   ))}
-               </Row>
-               <Row>
-               </Row>
-
-
+                       <Row>
+                           {
+                               topSpotifySongs &&
+                               topSpotifySongs.map((song, index) => (
+                                   <Col key={song.id} xs={12} sm={6} md={4} lg={3} xl={2} className="mb-3 d-flex">
+                                       <Card className="vinyl-card-recommendations">
+                                           <Card.Img src={song.album.images[1].url} />
+                                           <Card.Body>
+                                               <Card.Title className="text-light text-cart-title">
+                                                   <a href={song.externalUrls.externalUrls.spotify}>
+                                                       {song.name}
+                                                   </a>
+                                               </Card.Title>
+                                               <Card.Text className="text-secondary text-cart-body">
+                                                   {
+                                                       song.artists.map((artist, index) => (
+                                                           index === song.artists.length - 1 ? artist.name : artist.name + ', '
+                                                       ))
+                                                   }
+                                               </Card.Text>
+                                           </Card.Body>
+                                       </Card>
+                                   </Col>
+                               ))}
+                       </Row>
+                       <Row className='d-flex justify-content-center w-100 mt-3 mb-3'>
+                           <hr className="h-5 text-secondary mt-2 mb-1 w-100" />
+                       </Row>
+                       <h1 className="fs-3 fw-bold text-light mb-3 mx-3">Favorites artists</h1>
+                       <Row>
+                           {
+                               topSpotifyArtists &&
+                               topSpotifyArtists.map((artist, index) => (
+                                   <Col key={index} xs={12} sm={6} md={4} lg={3} xl={2} className="mb-3 d-flex">
+                                       <Card className="vinyl-card-recommendations">
+                                           <Card.Img src={artist.images[1].url} />
+                                           <Card.Body>
+                                               <Card.Title className="text-light text-cart-title">
+                                                   <a href={artist.externalUrls.externalUrls.spotify}>
+                                                       {artist.name}
+                                                   </a>
+                                               </Card.Title>
+                                               <Card.Text className="text-secondary text-cart-body">
+                                                   {
+                                                       artist.genres.map((genres, index) => (
+                                                           index === artist.genres.length - 1 ? genres : genres + ', '
+                                                       ))
+                                                   }
+                                               </Card.Text>
+                                           </Card.Body>
+                                       </Card>
+                                   </Col>
+                               ))}
+                       </Row>
+                   </Tab>
+                   <Tab eventKey="spotify-preferences" title="Recommendations">
+                       Tab content for Loooonger Tab
+                   </Tab>
+               </Tabs>
            </Container>
        </CustomLayout>
    )
