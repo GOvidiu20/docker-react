@@ -6,7 +6,7 @@ export default function Register() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
+    const navigate = useNavigate();
     const handleRegister = async (e) => {
         e.preventDefault();
 
@@ -25,8 +25,8 @@ export default function Register() {
             });
 
             if (response.token) {
-                sessionStorage.setItem('token', response.token);
-                //navigate('/home');
+                localStorage.setItem('token', response.token);
+                navigate('/home');
             }
         } catch (error) {
             console.error('Error during register:', error);

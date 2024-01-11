@@ -1,5 +1,19 @@
-.container-scrollable{
+.container-scrollable-recommender{
   overflow-x: auto;
   padding-bottom: 10px;
-  height: calc(100vh - 290px);
+  height: calc(100vh - 210px);
+}
+.vinyl-card-recommendations {
+  padding: 5px 5px;
+  background-color: #111111;
+  position: relative;
+}
+.recommendation-tab li > button.active{
+  color: #188754 !important;
+}
+.recommendation-tab li > button:hover{
+  color: #9b9b9b;
+}
+.recommendation-tab li > button{
+  color: #9b9b9b;
 }

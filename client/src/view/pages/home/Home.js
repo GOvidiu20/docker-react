@@ -25,7 +25,7 @@ export default function Home() {
         try {
             await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/songs', {
                 headers: new Headers({
-                    'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 }),
             })
                 .then(response => response.json())
@@ -39,9 +39,9 @@ export default function Home() {
     };
     const loadPlaylists = async () => {
         try {
-            await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/playlists/user/' + sessionStorage.getItem('userId'), {
+            await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/playlists/user/' + localStorage.getItem('userId'), {
                 headers: new Headers({
-                    'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 }),
             })
                 .then(respone => respone.json())
@@ -62,14 +62,14 @@ export default function Home() {
     };
 
     const addSongToPlaylist = async (e) => {
-        const apiUrl = process.env.REACT_APP_BACKEND_SERVER + '/api/playlists/' + selectedPlaylistOption.value + '/songs/' + selectedSong.id;
+        const apiUrl = process.env.REACT_APP_BACKEND_SERVER + '/api/playlists/' + selectedPlaylistOption.value + '/songs/' + selectedSong.id + '/user/' + localStorage.getItem('userId');
 
         try {
             const response = await fetch(apiUrl, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 },
             });
             if(response.status === 200) {
@@ -119,7 +119,7 @@ export default function Home() {
                    {
                        shownSongs.length !== 0 ?
                            shownSongs.map((song, index) => (
-                           <Col key={song.id} xs={12} sm={12} md={4} lg={3} xl={2} className="mb-3">
+                           <Col key={song.id} xs={12} sm={12} md={4} lg={3} xl={2} className="mb-3 d-flex">
                                <Button className="p-0 border-0" onClick={() => selectSongButton(song)}>
                                    <Card className="vinyl-cart">
                                        <MoreVertIcon className="button-card" sx={{ color: '#1ed760' }} fontSize="large"/>

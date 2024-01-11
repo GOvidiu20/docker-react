@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import CustomLayout from "../../components/Layout";
-import {Container, Row, Col, Card, Nav, Button, Form} from 'react-bootstrap';
+import {Container, Row, Col, Card, Nav, Button, Form, Spinner} from 'react-bootstrap';
 import {useParams} from "react-router-dom";
 import DataTable, {createTheme} from "react-data-table-component";
 import IconButton from "@mui/material/IconButton";
@@ -15,11 +15,13 @@ import Modal from 'react-bootstrap/Modal';
 import { useNavigate } from "react-router";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import moment from "moment";
 
 export default function PlaylistChange() {
 
     const [songs, setSongs] = useState([]);
     const [shownSongs, setShownSongs] = useState([]);
+    const [loadingButton, setLoadingButton] = useState(false)
     const [playlist, setPlaylist] = useState([]);
     const [playlistSongs, setPlaylistSongs] = useState([]);
     const [changeNameModal, setChangeNameModal] = useState(false);
@@ -38,7 +40,7 @@ export default function PlaylistChange() {
         try {
             await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/playlists/' + id, {
                 headers: new Headers({
-                    'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 }),
             })
                 .then(response => response.json())
@@ -54,7 +56,7 @@ export default function PlaylistChange() {
         try {
             await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/songs', {
                 headers: new Headers({
-                    'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 }),
             })
                 .then(response => response.json())
@@ -89,7 +91,7 @@ export default function PlaylistChange() {
         },
         {
             name: 'Release date',
-            selector: row => row.createdById,
+            selector: row => Moment(row.release_date).format('d MMM Y'),
         },
         {
             name: 'Actions',
@@ -191,11 +193,12 @@ export default function PlaylistChange() {
             setNewPlaylistCategory("New Category")
         }
     }
-    //
+
     const changePlaylist = async (e) => {
 
+        setLoadingButton(true);
         const apiUrl = id
-                        ? process.env.REACT_APP_BACKEND_SERVER + '/api/playlists/' + id
+                        ? process.env.REACT_APP_BACKEND_SERVER + '/api/playlists/' + id + '/' + localStorage.getItem('userId')
                         : process.env.REACT_APP_BACKEND_SERVER + '/api/playlists'
                         ;
 
@@ -204,7 +207,7 @@ export default function PlaylistChange() {
                 method: id ? 'PUT' : 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 },
                 body: JSON.stringify(
                     id
@@ -213,10 +216,13 @@ export default function PlaylistChange() {
                             title: newPlaylistName,
                             category: newPlaylistCategory,
                             songIds: playlistSongs.map(song => song.id),
-                            createdById: sessionStorage.getItem('userId')
+                            userIds: [localStorage.getItem('userId')],
+                            createdDate: moment(),
                         }
                 ),
             });
+
+            setLoadingButton(false);
             if(response.status === 200) {
                 navigate('/playlists');
             } else {
@@ -225,6 +231,7 @@ export default function PlaylistChange() {
                 });
             }
         } catch (error) {
+            setLoadingButton(true);
             console.error('Error during login:', error);
         }
     };
@@ -248,8 +255,17 @@ export default function PlaylistChange() {
                                 fixedHeader
                                 actions={
                                     <div className="d-flex">
-                                        <Button className="mx-3" variant="contained" size="small" style={{ backgroundColor: 'white', color: 'black', borderRadius: '30px' }} onClick={() => changePlaylist()}>
-                                            {id ? 'Edit ' : 'Add ' } Playlist
+                                        <Button disabled={loadingButton} className="mx-3" variant="contained" size="small" style={{ backgroundColor: 'white', color: 'black', borderRadius: '30px' }} onClick={() => changePlaylist()}>
+                                            {loadingButton &&
+                                                <Spinner
+                                                as="span"
+                                                animation="border"
+                                                size="sm"
+                                                role="status"
+                                                aria-hidden="true"
+                                            />
+                                            }
+                                            {id ? ' Edit ' : ' Add ' } Playlist
                                         </Button>
                                     </div>
                                 }

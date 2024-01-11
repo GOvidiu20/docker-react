@@ -26,8 +26,8 @@ export default function Login() {
             }).then(data => data.json());
 
             if (response.jwt) {
-                sessionStorage.setItem('token', response.jwt);
-                sessionStorage.setItem('userId', response.id);
+                localStorage.setItem('token', response.jwt);
+                localStorage.setItem('userId', response.id);
 
                 setError(null);
                 navigate('/home');
