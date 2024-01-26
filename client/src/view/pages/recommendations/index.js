@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import CustomLayout from "../../components/Layout";
 import {Container, Row, Col, Button, Card, Tab, Tabs} from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import './recommendation.scss';
 
 export default function Recommendations() {
@@ -10,6 +11,9 @@ export default function Recommendations() {
     const [topSpotifySongs, setTopSpotifySongs] = useState([])
     const [topSpotifyArtists, setTopSpotifyArtists] = useState([])
     const [spotifySavedAlbums, setSpotifySavedAlbums] = useState([])
+    const [userPreference, setUserPreference] = useState("")
+    const [sparkRecommendedSongs, setSparkRecommendedSongs] = useState([]);
+    const [file, setFile] = useState();
 
     useEffect(() => {
         // loadSongs();
@@ -120,22 +124,61 @@ export default function Recommendations() {
     }
     async function verifyUserTokenAvailability(){
         try {
-                await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/spotify/verify?userId=' + localStorage.getItem('userId'), {
-                    headers: new Headers({
-                        'Authorization': 'Bearer ' + localStorage.getItem('token'),
-                    }),
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log(data);
-                    })
+            await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/spotify/verify?userId=' + localStorage.getItem('userId'), {
+                headers: new Headers({
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
         } catch (error) {
             console.error('Error fetching user:', error);
         }
     }
-    function handleSearch(value) {
-        console.log(value);
+    async function getSparkRecommendedSongs(){
+        console.log(userPreference);
+        try {
+            await fetch(process.env.REACT_APP_VINYL_RECOMMENDER + '/songs',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "text" : userPreference,
+                }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    setSparkRecommendedSongs(data)
+                })
+        } catch (error) {
+            console.error('Error fetching user:', error);
+        }
     }
+    async function getFileRecommendedSongs(){
+        console.log(file.size);
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            await fetch(process.env.REACT_APP_VINYL_RECOMMENDER + '/document',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/xspf+xml',
+                },
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                })
+        } catch (error) {
+            console.error('Error fetching user:', error);
+        }
+    }
+
 
     return (
        <CustomLayout>
@@ -150,9 +193,32 @@ export default function Recommendations() {
                        <Row className='d-flex justify-content-center'>
                            <Col xs={12} className="d-flex w-50">
                                <input type="text" className="form-control rounded mx-3" placeholder="Find vinyls by your tastes(I love/hate rock...)"
-                                      onChange={(e) => handleSearch(e.target.value)}/>
-                               <Button>Find</Button>
+                                      onChange={(e) => setUserPreference(e.target.value)}/>
+                               <Button onClick={ () => getSparkRecommendedSongs()}>Find</Button>
                            </Col>
+                       </Row>
+                       <Row>
+                           {
+                               sparkRecommendedSongs &&
+                               sparkRecommendedSongs.map((song, index) => (
+                                   <Col key={song.id} xs={12} sm={6} md={4} lg={3} xl={2} className="mb-3 d-flex">
+                                       <Card className="vinyl-card-recommendations">
+                                           <Card.Img src="" />
+                                           <Card.Body>
+                                               <Card.Title className="text-light text-cart-title">
+                                                   <a href={song.discogs}>
+                                                       {song.vinylLabel}
+                                                   </a>
+                                               </Card.Title>
+                                               <Card.Text className="text-secondary text-cart-body">
+                                                   {
+                                                       song.creator
+                                                   }
+                                               </Card.Text>
+                                           </Card.Body>
+                                       </Card>
+                                   </Col>
+                               ))}
                        </Row>
                    </Tab>
                    <Tab eventKey="profile" title="Spotify Recommendations">
@@ -215,6 +281,26 @@ export default function Recommendations() {
                    </Tab>
                    <Tab eventKey="spotify-preferences" title="Recommendations">
                        Tab content for Loooonger Tab
+                   </Tab>
+                   <Tab eventKey="local-file" title="Local file">
+                       <Row className='d-flex justify-content-center'>
+                           <Col xs={12} className="d-flex w-50">
+                               <div className="mx-3">
+                                   <Form.Control
+                                       type="file"
+                                       accept=".xspf"
+                                       onChange={(e) => setFile(e.target.files[0])}
+                                   />
+                                   <Form.Text className="text-secondary">
+                                       Click on the label to choose a file. Only .xspf files are allowed.
+                                   </Form.Text>
+                               </div>
+                               <div>
+                                   <Button onClick={ () => getFileRecommendedSongs()}>Find</Button>
+
+                               </div>
+                           </Col>
+                       </Row>
                    </Tab>
                </Tabs>
            </Container>
