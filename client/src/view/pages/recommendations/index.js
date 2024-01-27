@@ -159,23 +159,22 @@ export default function Recommendations() {
     }
     async function getFileRecommendedSongs(){
         console.log(file.size);
-        try {
-            const formData = new FormData();
-            formData.append('file', file);
+        const formData = new FormData();
+        formData.append('file', document.querySelector('input[type=file]').files[0]);
 
-            await fetch(process.env.REACT_APP_VINYL_RECOMMENDER + '/document',{
+        try {
+            const response = await fetch(process.env.REACT_APP_VINYL_RECOMMENDER + '/document', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/xspf+xml',
+                    'Access-Control-Allow-Credentials': true,
                 },
-                body: formData
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                })
+                body: formData,
+            });
+
+            const data = await response.json();
+            console.log(data);
         } catch (error) {
-            console.error('Error fetching user:', error);
+            console.error('Error:', error);
         }
     }
 
@@ -289,6 +288,8 @@ export default function Recommendations() {
                                    <Form.Control
                                        type="file"
                                        accept=".xspf"
+                                       id="file"
+                                       name="file"
                                        onChange={(e) => setFile(e.target.files[0])}
                                    />
                                    <Form.Text className="text-secondary">
