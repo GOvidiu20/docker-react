@@ -7,6 +7,7 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import {toast} from "react-toastify";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import IconButton from "@mui/material/IconButton";
 export default function Home() {
 
     const animatedComponents = makeAnimated();
@@ -108,32 +109,29 @@ export default function Home() {
 
     return (
        <CustomLayout>
-           <Container className="mt-5">
+           <Container className="mt-5 container-scrollable">
                <Row className='d-flex justify-content-center'>
                    <Col xs={12} className="w-50">
                        <input type="text" className="form-control rounded" placeholder="Search your favourite vinyl..."
                               onChange={(e) => handleSearch(e.target.value)}/>
                    </Col>
                </Row>
-               <Row className="mt-5 container-scrollable">
+               <Row className="mt-3">
                    {
                        shownSongs.length !== 0 ?
                            shownSongs.map((song, index) => (
                            <Col key={song.id} xs={12} sm={12} md={4} lg={3} xl={2} className="mb-3 d-flex">
-                               <Button className="p-0 border-0" onClick={() => selectSongButton(song)}>
-                                   <Card className="vinyl-cart">
-                                       <MoreVertIcon className="button-card" sx={{ color: '#1ed760' }} fontSize="large"/>
-                                       <Card.Img src="https://newjams-images.scdn.co/image/ab67647800003f8a/dt/v3/release-radar/ab6761610000e5eb6cab9e007b77913d63f12835/en" />
-                                       <Card.Body>
-                                           <Card.Title className="text-light text-cart-title">
-                                               {song.title.length > 15 ? song.title.slice(0, 15) + '...' : song.title}
-                                           </Card.Title>
-                                           <Card.Text className="text-secondary text-cart-body">
-                                               Author
-                                           </Card.Text>
-                                       </Card.Body>
-                                   </Card>
-                               </Button>
+                               <Card className="vinyl-cart" onClick={() => selectSongButton(song)}>
+                                   <Card.Img src="https://newjams-images.scdn.co/image/ab67647800003f8a/dt/v3/release-radar/ab6761610000e5eb6cab9e007b77913d63f12835/en" />
+                                   <Card.Body>
+                                       <Card.Title className="text-light text-cart-title">
+                                           {song.title.length > 15 ? song.title.slice(0, 15) + '...' : song.title}
+                                       </Card.Title>
+                                       <Card.Text className="text-secondary text-cart-body">
+                                           Author
+                                       </Card.Text>
+                                   </Card.Body>
+                               </Card>
                            </Col>
                    ))
                        : <p className="text-secondary">No vinyls found</p>

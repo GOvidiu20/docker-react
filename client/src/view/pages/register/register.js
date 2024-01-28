@@ -24,10 +24,7 @@ export default function Register() {
                 }),
             });
 
-            if (response.token) {
-                localStorage.setItem('token', response.token);
-                navigate('/home');
-            }
+            navigate('/login');
         } catch (error) {
             console.error('Error during register:', error);
         }

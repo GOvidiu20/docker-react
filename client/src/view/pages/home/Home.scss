@@ -1,4 +1,3 @@
-
 .container-scrollable{
   overflow-x: auto;
   padding-bottom: 10px;
@@ -15,18 +14,9 @@
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
   background-color: #212121;
 }
-.vinyl-cart:hover .button-card{
-  display: block !important;
-}
 .text-cart-title{
   font-size: 14px;
 }
 .text-cart-body{
   font-size:12px
-}
-.button-card{
-  display: none !important;
-  position: absolute;
-  bottom: 40%;
-  right: 10%;
 }

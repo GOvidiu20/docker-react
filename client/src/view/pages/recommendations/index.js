@@ -13,6 +13,8 @@ export default function Recommendations() {
     const [spotifySavedAlbums, setSpotifySavedAlbums] = useState([])
     const [userPreference, setUserPreference] = useState("")
     const [sparkRecommendedSongs, setSparkRecommendedSongs] = useState([]);
+    const [spotifyRecommendedSongs, setSpotifyRecommendedSongs] = useState([]);
+    const [fileRecommendedSongs, setFileRecommendedSongs] = useState([]);
     const [file, setFile] = useState();
 
     useEffect(() => {
@@ -21,8 +23,12 @@ export default function Recommendations() {
         loadSpotifySavedAlbums();
         loadTopSpotifyArtists();
         loadTopSpotifySongs();
+        getSpotifyRecommendedSongs();
         verifyUserTokenAvailability();
     }, []);
+    useEffect(() => {
+        getSpotifyRecommendedSongs();
+    }, [topSpotifySongs, topSpotifyArtists]);
 
     const loadSongs = async () => {
         try {
@@ -37,6 +43,7 @@ export default function Recommendations() {
             console.error('Error fetching songs:', error);
         }
     };
+
     const loadPlaylists = async () => {
         try {
             await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/playlists/user/' + localStorage.getItem('userId'), {
@@ -138,7 +145,6 @@ export default function Recommendations() {
         }
     }
     async function getSparkRecommendedSongs(){
-        console.log(userPreference);
         try {
             await fetch(process.env.REACT_APP_VINYL_RECOMMENDER + '/songs',{
                 method: 'POST',
@@ -157,24 +163,58 @@ export default function Recommendations() {
             console.error('Error fetching user:', error);
         }
     }
+    async function getSpotifyRecommendedSongs(){
+        let artists = [];
+        let genres = [];
+        topSpotifySongs && topSpotifySongs.map((song) => {
+            console.log(song.artists);
+            song.artists.map((artist) => (
+                artists.push(artist.name)
+            ))
+        })
+        topSpotifyArtists && topSpotifyArtists.map((artist) => {
+            artists.push(artist.name);
+            artist.genres.map((genre) => (
+                genres.push(genre)
+            ))
+        })
+        if (artists.length !== 0 || genres.length !== 0)
+            try {
+                await fetch(process.env.REACT_APP_VINYL_RECOMMENDER + '/spotify',{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "artists" : artists,
+                        "genres" : genres,
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        setSpotifyRecommendedSongs(data);
+                    })
+            } catch (error) {
+                console.error('Error fetching user:', error);
+            }
+    }
     async function getFileRecommendedSongs(){
-        console.log(file.size);
         const formData = new FormData();
-        formData.append('file', document.querySelector('input[type=file]').files[0]);
-
+        formData.append('file', file);
         try {
-            const response = await fetch(process.env.REACT_APP_VINYL_RECOMMENDER + '/document', {
+            await fetch(process.env.REACT_APP_VINYL_RECOMMENDER + '/document',{
                 method: 'POST',
                 headers: {
                     'Access-Control-Allow-Credentials': true,
                 },
                 body: formData,
-            });
-
-            const data = await response.json();
-            console.log(data);
+            })
+                .then(response => response.json())
+                .then(data => {
+                    setFileRecommendedSongs(data);
+                })
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error fetching user:', error);
         }
     }
 
@@ -189,7 +229,7 @@ export default function Recommendations() {
                    variant="underline"
                >
                    <Tab eventKey="preferences" title="Your Preferences">
-                       <Row className='d-flex justify-content-center'>
+                       <Row className='d-flex justify-content-center mb-3'>
                            <Col xs={12} className="d-flex w-50">
                                <input type="text" className="form-control rounded mx-3" placeholder="Find vinyls by your tastes(I love/hate rock...)"
                                       onChange={(e) => setUserPreference(e.target.value)}/>
@@ -202,7 +242,7 @@ export default function Recommendations() {
                                sparkRecommendedSongs.map((song, index) => (
                                    <Col key={song.id} xs={12} sm={6} md={4} lg={3} xl={2} className="mb-3 d-flex">
                                        <Card className="vinyl-card-recommendations">
-                                           <Card.Img src="" />
+                                           <Card.Img src={song.discogs_image} className="img-fluid"/>
                                            <Card.Body>
                                                <Card.Title className="text-light text-cart-title">
                                                    <a href={song.discogs}>

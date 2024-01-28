@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import CustomLayout from "../../components/Layout";
-import {Container, Row, Col, Card} from 'react-bootstrap';
+import {Container, Row, Col, Card, Form, Button} from 'react-bootstrap';
 import './profile.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpotify } from '@fortawesome/free-brands-svg-icons';
@@ -11,6 +11,8 @@ import {toast} from "react-toastify";
 export default function Profile() {
 
     const [user, setUser] = useState();
+    const [newName, setNewName] = useState();
+    const [newPassword, setNewPassword] = useState();
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -31,7 +33,7 @@ export default function Profile() {
                 }),
             })
                 .then(response => response.json())
-                .then(data => setUser(data))
+                .then(data => {setUser(data); console.log(data);})
         } catch (error) {
             console.error('Error fetching user:', error);
         }
@@ -80,6 +82,28 @@ export default function Profile() {
         }
     }
 
+    async function updateUser(){
+        try {
+            await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/user/update', {
+                method: 'PUT',
+                headers: new Headers({
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                    'Content-Type': 'application/json'
+                }),
+                body: JSON.stringify({
+                    'id' : user.id,
+                    'email' : user.email,
+                    'name' : newName,
+                    'password' : newPassword,
+                }),
+            })
+                .then(response => response.json())
+                .then(data => console.log(data))
+        } catch (error) {
+            console.error('Error fetching user:', error);
+        }
+    }
+
     return (
        <CustomLayout>
            <Container className="mt-5">
@@ -91,12 +115,26 @@ export default function Profile() {
                                    General Informations
                                </Card.Title>
                                <Card.Text className="text-secondary">
-                                   <div>
-                                       {user && "Name: " + user.name }
-                                   </div>
-                                   <div>
-                                       {user && "Email: " + user.email }
-                                   </div>
+                                   <Form.Group className="mb-3">
+                                       <Form.Label>Name</Form.Label>
+                                       <Form.Control
+                                           type="text"
+                                           id="new_name"
+                                           placeholder={user && user.name }
+                                           onChange={(e) => setNewName(e.target.value)}
+                                       />
+                                   </Form.Group>
+
+                                   <Form.Group className="mb-3">
+                                       <Form.Label>New Password</Form.Label>
+                                       <Form.Control
+                                           type="password"
+                                           id="new_password"
+                                           onChange={(e) => setNewPassword(e.target.value)}
+                                       />
+                                   </Form.Group>
+
+                                   <Button onClick={() => updateUser()}>Update</Button>
                                </Card.Text>
                            </Card.Body>
                        </Card>
