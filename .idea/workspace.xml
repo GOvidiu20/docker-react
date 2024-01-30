@@ -6,13 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="63b466c8-c417-4d27-9437-25ac20b63e67" name="Changes" comment="git deploy">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/.env" beforeDir="false" afterPath="$PROJECT_DIR$/client/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/view/pages/home/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/view/pages/home/Home.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/view/pages/home/Home.scss" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/view/pages/home/Home.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/view/pages/profile/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/view/pages/profile/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/view/pages/recommendations/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/view/pages/recommendations/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/view/pages/recommendations/recommendation.scss" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/view/pages/recommendations/recommendation.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/view/pages/register/register.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/view/pages/register/register.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,7 +114,8 @@
       <workItem from="1704956346745" duration="711000" />
       <workItem from="1705042811618" duration="882000" />
       <workItem from="1706271181546" duration="12316000" />
-      <workItem from="1706348429133" duration="21834000" />
+      <workItem from="1706348429133" duration="22558000" />
+      <workItem from="1706515520221" duration="4000" />
     </task>
     <task id="LOCAL-00001" summary="git deploy">
       <option name="closed" value="true" />

@@ -122,13 +122,20 @@ export default function Home() {
                            shownSongs.map((song, index) => (
                            <Col key={song.id} xs={12} sm={12} md={4} lg={3} xl={2} className="mb-3 d-flex">
                                <Card className="vinyl-cart" onClick={() => selectSongButton(song)}>
-                                   <Card.Img src="https://newjams-images.scdn.co/image/ab67647800003f8a/dt/v3/release-radar/ab6761610000e5eb6cab9e007b77913d63f12835/en" />
+                                   <Card.Img src={song.discogs_image} />
                                    <Card.Body>
                                        <Card.Title className="text-light text-cart-title">
-                                           {song.title.length > 15 ? song.title.slice(0, 15) + '...' : song.title}
+                                           <a href={song.discogs}>
+                                                {song.title.length > 15 ? song.title.slice(0, 15) + '...' : song.title}
+                                           </a>
                                        </Card.Title>
                                        <Card.Text className="text-secondary text-cart-body">
-                                           Author
+                                           <div>
+                                               {song.creator}
+                                           </div>
+                                           <div>
+                                               {song.genre}
+                                           </div>
                                        </Card.Text>
                                    </Card.Body>
                                </Card>

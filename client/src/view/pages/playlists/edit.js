@@ -60,7 +60,7 @@ export default function PlaylistChange() {
                 }),
             })
                 .then(response => response.json())
-                .then(data => setSongs(data))
+                .then(data => {setSongs(data); setShownSongs(data)})
         } catch (error) {
             console.error('Error fetching songs:', error);
         }

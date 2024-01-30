@@ -23,12 +23,8 @@ export default function Recommendations() {
         loadSpotifySavedAlbums();
         loadTopSpotifyArtists();
         loadTopSpotifySongs();
-        getSpotifyRecommendedSongs();
         verifyUserTokenAvailability();
     }, []);
-    useEffect(() => {
-        getSpotifyRecommendedSongs();
-    }, [topSpotifySongs, topSpotifyArtists]);
 
     const loadSongs = async () => {
         try {
@@ -76,13 +72,29 @@ export default function Recommendations() {
                     }),
                 })
                     .then(response => response.json())
-                    .then(data => {
-                        if(data.length !== 0) {
-                            setTopSpotifySongs(data);
-                            localStorage.setItem("songs", JSON.stringify(data));
-                        }
-                        else {
-                            setTopSpotifySongs(JSON.parse(localStorage.getItem('songs')));
+                    .then(async data => {
+                        if (data.length !== 0) {
+                            let songs = [];
+                            data.forEach(song => {
+                                let artists = "";
+                                song.artists.map((artist, index) => (
+                                    artists += index === song.artists.length - 1 ? artist.name : artist.name + ', '
+                                ))
+                                songs.push({
+                                    'artists' : artists,
+                                    'name' : song.name,
+                                    'spotifyUrl': song.externalUrls.externalUrls.spotify,
+                                    'url': song.album.images[1].url,
+                                })
+                            })
+                            setTopSpotifySongs(songs);
+                        } else {
+                            await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/songs/spotify/' + localStorage.getItem('userId'), {
+                                headers: new Headers({
+                                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                                }),
+                            }).then(response => response.json())
+                              .then(data => setTopSpotifySongs(data))
                         }
                     })
         } catch (error) {
@@ -97,13 +109,18 @@ export default function Recommendations() {
                     }),
                 })
                     .then(response => response.json())
-                    .then(data => {
-                        if(data.length !== 0) {
+                    .then(async data => {
+                        if (data.length !== 0) {
                             setTopSpotifyArtists(data);
                             localStorage.setItem("artists", JSON.stringify(data));
+                        } else {
+                            await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/artists/spotify/' + localStorage.getItem('userId'), {
+                                headers: new Headers({
+                                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                                }),
+                            }).then(response => response.json())
+                              .then(data => {setTopSpotifyArtists(data);console.log(data)})
                         }
-                        else
-                            setTopSpotifyArtists(JSON.parse(localStorage.getItem('artists')));
                     })
         } catch (error) {
             console.error('Error fetching user:', error);
@@ -167,9 +184,8 @@ export default function Recommendations() {
         let artists = [];
         let genres = [];
         topSpotifySongs && topSpotifySongs.map((song) => {
-            console.log(song.artists);
-            song.artists.map((artist) => (
-                artists.push(artist.name)
+            song.artists.split(',').map((artist) => (
+                artists.push(artist.replace(/\s/g, ""))
             ))
         })
         topSpotifyArtists && topSpotifyArtists.map((artist) => {
@@ -212,12 +228,12 @@ export default function Recommendations() {
                 .then(response => response.json())
                 .then(data => {
                     setFileRecommendedSongs(data);
+                    console.log(data);
                 })
         } catch (error) {
             console.error('Error fetching user:', error);
         }
     }
-
 
     return (
        <CustomLayout>
@@ -260,7 +276,7 @@ export default function Recommendations() {
                                ))}
                        </Row>
                    </Tab>
-                   <Tab eventKey="profile" title="Spotify Recommendations">
+                   <Tab eventKey="spotify" title="Spotify">
                        <h1 className="fs-3 fw-bold text-light mb-2 mx-3">Favorites songs</h1>
 
                        <Row>
@@ -269,18 +285,16 @@ export default function Recommendations() {
                                topSpotifySongs.map((song, index) => (
                                    <Col key={song.id} xs={12} sm={6} md={4} lg={3} xl={2} className="mb-3 d-flex">
                                        <Card className="vinyl-card-recommendations">
-                                           <Card.Img src={song.album.images[1].url} />
+                                           <Card.Img src={song.url} />
                                            <Card.Body>
                                                <Card.Title className="text-light text-cart-title">
-                                                   <a href={song.externalUrls.externalUrls.spotify}>
+                                                   <a href={song.spotifyUrl}>
                                                        {song.name}
                                                    </a>
                                                </Card.Title>
                                                <Card.Text className="text-secondary text-cart-body">
                                                    {
-                                                       song.artists.map((artist, index) => (
-                                                           index === song.artists.length - 1 ? artist.name : artist.name + ', '
-                                                       ))
+                                                       song.artists
                                                    }
                                                </Card.Text>
                                            </Card.Body>
@@ -318,8 +332,14 @@ export default function Recommendations() {
                                ))}
                        </Row>
                    </Tab>
-                   <Tab eventKey="spotify-preferences" title="Recommendations">
-                       Tab content for Loooonger Tab
+                   <Tab eventKey="spotify-recommendations" title="Spotify Recommendations">
+                       <Row className='d-flex justify-content-center'>
+                           <Col xs={12} className="d-flex w-50">
+                               <div>
+                                   <Button onClick={ () => getSpotifyRecommendedSongs()}>Find</Button>
+                               </div>
+                           </Col>
+                       </Row>
                    </Tab>
                    <Tab eventKey="local-file" title="Local file">
                        <Row className='d-flex justify-content-center'>
@@ -338,9 +358,34 @@ export default function Recommendations() {
                                </div>
                                <div>
                                    <Button onClick={ () => getFileRecommendedSongs()}>Find</Button>
-
                                </div>
                            </Col>
+                       </Row>
+                       <Row>
+                           {
+                               fileRecommendedSongs &&
+                               fileRecommendedSongs.map((song, index) => (
+                                   <Col key={index} xs={12} sm={6} md={4} lg={3} xl={2} className="mb-3 d-flex">
+                                       <Card className="vinyl-card-recommendations">
+                                           <Card.Img src={song.discogs_image} />
+                                           <Card.Body>
+                                               <Card.Title className="text-light text-cart-title">
+                                                   <a href={song.discogs}>
+                                                       {song.vinylLabel}
+                                                   </a>
+                                               </Card.Title>
+                                               <Card.Text className="text-secondary text-cart-body">
+                                                   <div>
+                                                       {song.creator}
+                                                   </div>
+                                                   <div>
+                                                       {song.genre}
+                                                   </div>
+                                               </Card.Text>
+                                           </Card.Body>
+                                       </Card>
+                                   </Col>
+                               ))}
                        </Row>
                    </Tab>
                </Tabs>
