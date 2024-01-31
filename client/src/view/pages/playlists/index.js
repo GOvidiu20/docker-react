@@ -15,6 +15,7 @@ import './Playlists.scss';
 import 'react-toastify/dist/ReactToastify.css';
 import Moment from "moment/moment";
 import Swal from 'sweetalert2/dist/sweetalert2.js';
+import {Share} from "@mui/icons-material";
 
 export default function Playlists() {
     const navigate = useNavigate();
@@ -74,10 +75,29 @@ export default function Playlists() {
                 } catch (error) {
                     console.error('Error fetching playlists:', error);
                 }
-
             }
         });
+    }
 
+    async function sharePlaylist(playlistId) {
+        try {
+            await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/user/' + localStorage.getItem('userId') + '/share-playlist/' + playlistId, {
+                headers: new Headers({
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                }),
+            })
+                .then(response => response.text())
+                .then(data => {
+                    let link = process.env.REACT_APP_FRONTEND + '/playlists/' + playlistId + '/share'
+                    Swal.fire({
+                        title: "Send this link to the person you wanna share this playlist",
+                        html: '<a type="button">' + link + '</a>',
+                        showConfirmButton: false,
+                    });
+                })
+        } catch (error) {
+            console.error('Error fetching user:', error);
+        }
     }
 
     const columns = [
@@ -101,8 +121,11 @@ export default function Playlists() {
                     <IconButton aria-label="delete" color="error" onClick={() => deletePlaylist(row.id)}>
                         <DeleteIcon/>
                     </IconButton>
-                    <IconButton aria-label="delete" color="primary" onClick={() => navigate(`/playlists/${row.id}/edit`)}>
+                    <IconButton aria-label="edit" color="primary" onClick={() => navigate(`/playlists/${row.id}/edit`)}>
                         <EditIcon/>
+                    </IconButton>
+                    <IconButton aria-label="share" color="primary" onClick={() => sharePlaylist(row.id)}>
+                        <Share/>
                     </IconButton>
                 </div>
             ),

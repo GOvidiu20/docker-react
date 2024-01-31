@@ -15,6 +15,7 @@ import Playlists from "./view/pages/playlists/index";
 import PlaylistChange from "./view/pages/playlists/edit";
 import Recommendations from "./view/pages/recommendations";
 import Profile from "./view/pages/profile";
+import PlaylistShare from "./view/pages/playlists/share";
 
 function App() {
 
@@ -49,6 +50,7 @@ const PlaylistRoutes = () => {
             <Route path="create" element={<PlaylistChange />} />
             <Route path=":id" element={<Playlists />} />
             <Route path=":id/edit" element={<PlaylistChange />} />
+            <Route path=":id/share" element={<PlaylistShare />} />
         </Routes>
     );
 };
