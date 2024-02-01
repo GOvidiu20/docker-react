@@ -112,14 +112,29 @@ export default function Recommendations() {
                     .then(async data => {
                         if (data.length !== 0) {
                             setTopSpotifyArtists(data);
-                            localStorage.setItem("artists", JSON.stringify(data));
+                            let artists = [];
+                            data.forEach(artist => {
+                                let genres = "";
+                                artist.genres.map((genre, index) => (
+                                    genres += index === artist.genres.length - 1 ? genres : genres + ', '
+                                ))
+                                artists.push({
+                                    'url' : artist.images[1].url,
+                                    'urlSpotify' : artist.externalUrls.externalUrls.spotify,
+                                    'genres' : genres,
+                                    'name' : artist.name
+                                })
+                            })
                         } else {
                             await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/artists/spotify/' + localStorage.getItem('userId'), {
                                 headers: new Headers({
                                     'Authorization': 'Bearer ' + localStorage.getItem('token'),
                                 }),
                             }).then(response => response.json())
-                              .then(data => {setTopSpotifyArtists(data);console.log(data)})
+                              .then(data => {
+                                  setTopSpotifyArtists(data);
+                                  console.log(data)
+                              })
                         }
                     })
         } catch (error) {
@@ -312,18 +327,16 @@ export default function Recommendations() {
                                topSpotifyArtists.map((artist, index) => (
                                    <Col key={index} xs={12} sm={6} md={4} lg={3} xl={2} className="mb-3 d-flex">
                                        <Card className="vinyl-card-recommendations">
-                                           <Card.Img src={artist.images[1].url} />
+                                           <Card.Img src={artist.url} />
                                            <Card.Body>
                                                <Card.Title className="text-light text-cart-title">
-                                                   <a href={artist.externalUrls.externalUrls.spotify}>
+                                                   <a href={artist.urlSpotify}>
                                                        {artist.name}
                                                    </a>
                                                </Card.Title>
                                                <Card.Text className="text-secondary text-cart-body">
                                                    {
-                                                       artist.genres.map((genres, index) => (
-                                                           index === artist.genres.length - 1 ? genres : genres + ', '
-                                                       ))
+                                                       artist.genres
                                                    }
                                                </Card.Text>
                                            </Card.Body>
