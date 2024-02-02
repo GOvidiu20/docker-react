@@ -126,7 +126,7 @@ export default function Home() {
                                    <Card.Body>
                                        <Card.Title className="text-light text-cart-title">
                                            <a href={song.discogs}>
-                                                {song.title.length > 15 ? song.title.slice(0, 15) + '...' : song.title}
+                                                {song.vinylLabel.length > 15 ? song.vinylLabel.slice(0, 15) + '...' : song.vinylLabel}
                                            </a>
                                        </Card.Title>
                                        <Card.Text className="text-secondary text-cart-body">

@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import CustomLayout from "../../components/Layout";
-import {Container, Row, Col, Button, Card, Tab, Tabs} from 'react-bootstrap';
+import {Container, Row, Col, Button, Card, Tab, Tabs, Spinner} from 'react-bootstrap';
 import { Form } from 'react-bootstrap';
 import './recommendation.scss';
+import DisplayVinyl from "../../components/showSongs";
 
 export default function Recommendations() {
 
@@ -16,6 +17,9 @@ export default function Recommendations() {
     const [spotifyRecommendedSongs, setSpotifyRecommendedSongs] = useState([]);
     const [fileRecommendedSongs, setFileRecommendedSongs] = useState([]);
     const [file, setFile] = useState();
+    const [loadingButtonText, setLoadingButtonText] = useState(false)
+    const [loadingButtonSpotify, setLoadingButtonSpotify] = useState(false)
+    const [loadingButtonFile, setLoadingButtonFile] = useState(false)
 
     useEffect(() => {
         // loadSongs();
@@ -177,6 +181,7 @@ export default function Recommendations() {
         }
     }
     async function getSparkRecommendedSongs(){
+        setLoadingButtonText(true)
         try {
             await fetch(process.env.REACT_APP_VINYL_RECOMMENDER + '/songs',{
                 method: 'POST',
@@ -190,12 +195,14 @@ export default function Recommendations() {
                 .then(response => response.json())
                 .then(data => {
                     setSparkRecommendedSongs(data)
+                    setLoadingButtonText(false)
                 })
         } catch (error) {
             console.error('Error fetching user:', error);
         }
     }
     async function getSpotifyRecommendedSongs(){
+        setLoadingButtonSpotify(true)
         let artists = [];
         let genres = [];
         topSpotifySongs && topSpotifySongs.map((song) => {
@@ -224,12 +231,14 @@ export default function Recommendations() {
                     .then(response => response.json())
                     .then(data => {
                         setSpotifyRecommendedSongs(data);
+                        setLoadingButtonSpotify(false)
                     })
             } catch (error) {
                 console.error('Error fetching user:', error);
             }
     }
     async function getFileRecommendedSongs(){
+        setLoadingButtonFile(true)
         const formData = new FormData();
         formData.append('file', file);
         try {
@@ -243,7 +252,7 @@ export default function Recommendations() {
                 .then(response => response.json())
                 .then(data => {
                     setFileRecommendedSongs(data);
-                    console.log(data);
+                    setLoadingButtonFile(false)
                 })
         } catch (error) {
             console.error('Error fetching user:', error);
@@ -264,36 +273,30 @@ export default function Recommendations() {
                            <Col xs={12} className="d-flex w-50">
                                <input type="text" className="form-control rounded mx-3" placeholder="Find vinyls by your tastes(I love/hate rock...)"
                                       onChange={(e) => setUserPreference(e.target.value)}/>
-                               <Button onClick={ () => getSparkRecommendedSongs()}>Find</Button>
+                               <Button disabled={loadingButtonText} onClick={ () => getSparkRecommendedSongs()}>
+                                   {loadingButtonText &&
+                                       <Spinner
+                                           as="span"
+                                           animation="border"
+                                           size="sm"
+                                           role="status"
+                                           aria-hidden="true"
+                                       />
+                                   }
+                                   Find
+                               </Button>
                            </Col>
                        </Row>
                        <Row>
                            {
                                sparkRecommendedSongs &&
                                sparkRecommendedSongs.map((song, index) => (
-                                   <Col key={song.id} xs={12} sm={6} md={4} lg={3} xl={2} className="mb-3 d-flex">
-                                       <Card className="vinyl-card-recommendations">
-                                           <Card.Img src={song.discogs_image} className="img-fluid"/>
-                                           <Card.Body>
-                                               <Card.Title className="text-light text-cart-title">
-                                                   <a href={song.discogs}>
-                                                       {song.vinylLabel}
-                                                   </a>
-                                               </Card.Title>
-                                               <Card.Text className="text-secondary text-cart-body">
-                                                   {
-                                                       song.creator
-                                                   }
-                                               </Card.Text>
-                                           </Card.Body>
-                                       </Card>
-                                   </Col>
+                                    DisplayVinyl(song = {song})
                                ))}
                        </Row>
                    </Tab>
                    <Tab eventKey="spotify" title="Spotify">
                        <h1 className="fs-3 fw-bold text-light mb-2 mx-3">Favorites songs</h1>
-
                        <Row>
                            {
                                topSpotifySongs &&
@@ -347,11 +350,32 @@ export default function Recommendations() {
                    </Tab>
                    <Tab eventKey="spotify-recommendations" title="Spotify Recommendations">
                        <Row className='d-flex justify-content-center'>
-                           <Col xs={12} className="d-flex w-50">
+                           <Col xs={12} className="d-flex w-25">
                                <div>
-                                   <Button onClick={ () => getSpotifyRecommendedSongs()}>Find</Button>
+                                   <label className="text-secondary fs-8">Find recommendation based on your Spotify recommended songs</label>
+                               </div>
+                               <div>
+                                   <Button disabled={loadingButtonSpotify} onClick={ () => getSpotifyRecommendedSongs()}>
+                                       {loadingButtonSpotify &&
+                                           <Spinner
+                                               as="span"
+                                               animation="border"
+                                               size="sm"
+                                               role="status"
+                                               aria-hidden="true"
+                                           />
+                                       }
+                                       Find
+                                   </Button>
                                </div>
                            </Col>
+                       </Row>
+                       <Row>
+                           {
+                               spotifyRecommendedSongs &&
+                               spotifyRecommendedSongs.map((song, index) => (
+                                   DisplayVinyl(song = {song})
+                               ))}
                        </Row>
                    </Tab>
                    <Tab eventKey="local-file" title="Local file">
@@ -370,7 +394,18 @@ export default function Recommendations() {
                                    </Form.Text>
                                </div>
                                <div>
-                                   <Button onClick={ () => getFileRecommendedSongs()}>Find</Button>
+                                   <Button disabled={loadingButtonFile} onClick={ () => getFileRecommendedSongs()}>
+                                       {loadingButtonFile &&
+                                           <Spinner
+                                               as="span"
+                                               animation="border"
+                                               size="sm"
+                                               role="status"
+                                               aria-hidden="true"
+                                           />
+                                       }
+                                       Find
+                                   </Button>
                                </div>
                            </Col>
                        </Row>
@@ -378,26 +413,7 @@ export default function Recommendations() {
                            {
                                fileRecommendedSongs &&
                                fileRecommendedSongs.map((song, index) => (
-                                   <Col key={index} xs={12} sm={6} md={4} lg={3} xl={2} className="mb-3 d-flex">
-                                       <Card className="vinyl-card-recommendations">
-                                           <Card.Img src={song.discogs_image} />
-                                           <Card.Body>
-                                               <Card.Title className="text-light text-cart-title">
-                                                   <a href={song.discogs}>
-                                                       {song.vinylLabel}
-                                                   </a>
-                                               </Card.Title>
-                                               <Card.Text className="text-secondary text-cart-body">
-                                                   <div>
-                                                       {song.creator}
-                                                   </div>
-                                                   <div>
-                                                       {song.genre}
-                                                   </div>
-                                               </Card.Text>
-                                           </Card.Body>
-                                       </Card>
-                                   </Col>
+                                   DisplayVinyl(song = {song})
                                ))}
                        </Row>
                    </Tab>

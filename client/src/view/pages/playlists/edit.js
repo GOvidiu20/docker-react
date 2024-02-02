@@ -83,11 +83,11 @@ export default function PlaylistChange() {
     const columns = [
         {
             name: 'Title',
-            selector: row => row.title,
+            selector: row => row.vinylLabel,
         },
         {
-            name: 'Album',
-            selector: row => row.createdById,
+            name: 'Artist',
+            selector: row => row.creator,
         },
         {
             name: 'Release date',
@@ -336,8 +336,8 @@ export default function PlaylistChange() {
                                 {
                                     shownSongs.map((song, index) => (
                                         <Row className="d-flex justify-content-between align-items-center song-list mb-2">
-                                            <Col xs={6}><span>{song.title}</span></Col>
-                                            <Col><span>{song.albumId}</span></Col>
+                                            <Col xs={6}><span>{song.vinylLabel}</span></Col>
+                                            <Col><span>{song.creator}</span></Col>
                                             <Col><span>{Moment(song.release_date).format('d MMM Y')}</span></Col>
                                             <Col className="d-flex justify-content-end">
                                                 <button className="button-classic" onClick={ () => addSongToPlaylist(song.id)}>
