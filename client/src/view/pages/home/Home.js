@@ -123,17 +123,19 @@ export default function Home() {
                            <Col key={song.id} xs={12} sm={12} md={4} lg={3} xl={2} className="mb-3 d-flex">
                                <Card className="vinyl-cart" onClick={() => selectSongButton(song)}>
                                    <Card.Img src={song.discogs_image} />
-                                   <Card.Body>
+                                   <Card.Body typeof="mo:Track">
                                        <Card.Title className="text-light text-cart-title">
-                                           <a href={song.discogs}>
-                                                {song.vinylLabel.length > 15 ? song.vinylLabel.slice(0, 15) + '...' : song.vinylLabel}
+                                           <a property="foaf:url" href={song.discogs}>
+                                               <span property="dc:title">
+                                                   {song.vinylLabel.length > 15 ? song.vinylLabel.slice(0, 15) + '...' : song.vinylLabel}
+                                               </span>
                                            </a>
                                        </Card.Title>
-                                       <Card.Text className="text-secondary text-cart-body">
-                                           <div>
+                                       <Card.Text typeof="mo:MusicGroup" className="text-secondary text-cart-body">
+                                           <div property="foaf:name">
                                                {song.creator}
                                            </div>
-                                           <div>
+                                           <div property="dc:genre">
                                                {song.genre}
                                            </div>
                                        </Card.Text>

@@ -107,11 +107,11 @@ export default function Playlists() {
         },
         {
             name: 'Author',
-            selector: row => row.createdById,
+            selector: row => row.username,
         },
         {
             name: 'Added date',
-            selector: row => Moment(row.createdDate).format('d MMM Y'),
+            selector: row => new Intl.DateTimeFormat('en-US', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(row.createdDate)),
             sortable: 'true'
         },
         {

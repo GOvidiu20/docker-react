@@ -47,8 +47,8 @@ export default function PlaylistShare() {
                     'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 }),
             })
-                .then(response => response.json())
-                .then(data => navigate('/playlists'))
+                .then(response => response.text())
+                .then(data => { console.log(data); navigate('/playlists');})
         } catch (error) {
             console.error('Error fetching user:', error);
         }
@@ -67,7 +67,7 @@ export default function PlaylistShare() {
                                   </div>
                                   <div className="mt-3">
                                       <Button className="mx-3" onClick={() => sharePlaylist()}>Approve</Button>
-                                      <Button variant="danger">Decline</Button>
+                                      <Button variant="danger" onClick={() => navigate('/home')}>Decline</Button>
                                   </div>
                               </div>
                     : ''

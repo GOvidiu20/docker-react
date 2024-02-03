@@ -181,7 +181,7 @@ export default function Recommendations() {
         }
     }
     async function getSparkRecommendedSongs(){
-        setLoadingButtonText(true)
+        setLoadingButtonText(true);
         try {
             await fetch(process.env.REACT_APP_VINYL_RECOMMENDER + '/songs',{
                 method: 'POST',
@@ -195,14 +195,15 @@ export default function Recommendations() {
                 .then(response => response.json())
                 .then(data => {
                     setSparkRecommendedSongs(data)
-                    setLoadingButtonText(false)
+                    setLoadingButtonText(false);
                 })
         } catch (error) {
             console.error('Error fetching user:', error);
+            setLoadingButtonText(false);
         }
     }
     async function getSpotifyRecommendedSongs(){
-        setLoadingButtonSpotify(true)
+        setLoadingButtonSpotify(true);
         let artists = [];
         let genres = [];
         topSpotifySongs && topSpotifySongs.map((song) => {
@@ -231,14 +232,15 @@ export default function Recommendations() {
                     .then(response => response.json())
                     .then(data => {
                         setSpotifyRecommendedSongs(data);
-                        setLoadingButtonSpotify(false)
+                        setLoadingButtonSpotify(false);
                     })
             } catch (error) {
                 console.error('Error fetching user:', error);
+                setLoadingButtonSpotify(false);
             }
     }
     async function getFileRecommendedSongs(){
-        setLoadingButtonFile(true)
+        setLoadingButtonFile(true);
         const formData = new FormData();
         formData.append('file', file);
         try {
@@ -252,10 +254,11 @@ export default function Recommendations() {
                 .then(response => response.json())
                 .then(data => {
                     setFileRecommendedSongs(data);
-                    setLoadingButtonFile(false)
+                    setLoadingButtonFile(false);
                 })
         } catch (error) {
             console.error('Error fetching user:', error);
+            setLoadingButtonFile(false);
         }
     }
 
@@ -274,16 +277,16 @@ export default function Recommendations() {
                                <input type="text" className="form-control rounded mx-3" placeholder="Find vinyls by your tastes(I love/hate rock...)"
                                       onChange={(e) => setUserPreference(e.target.value)}/>
                                <Button disabled={loadingButtonText} onClick={ () => getSparkRecommendedSongs()}>
-                                   {loadingButtonText &&
+                                   {loadingButtonText ?
                                        <Spinner
                                            as="span"
                                            animation="border"
                                            size="sm"
                                            role="status"
                                            aria-hidden="true"
-                                       />
+                                       /> :
+                                        "Find"
                                    }
-                                   Find
                                </Button>
                            </Col>
                        </Row>
@@ -304,16 +307,14 @@ export default function Recommendations() {
                                    <Col key={song.id} xs={12} sm={6} md={4} lg={3} xl={2} className="mb-3 d-flex">
                                        <Card className="vinyl-card-recommendations">
                                            <Card.Img src={song.url} />
-                                           <Card.Body>
+                                           <Card.Body typeof="mo:Track">
                                                <Card.Title className="text-light text-cart-title">
-                                                   <a href={song.spotifyUrl}>
-                                                       {song.name}
+                                                   <a property="dc:url" href={song.spotifyUrl}>
+                                                       <span property="dc:title">{song.name}</span>
                                                    </a>
                                                </Card.Title>
-                                               <Card.Text className="text-secondary text-cart-body">
-                                                   {
-                                                       song.artists
-                                                   }
+                                               <Card.Text typeof="mo:MusicGroup" className="text-secondary text-cart-body">
+                                                       <span property="foaf:name">{song.artists}</span>
                                                </Card.Text>
                                            </Card.Body>
                                        </Card>
@@ -331,16 +332,14 @@ export default function Recommendations() {
                                    <Col key={index} xs={12} sm={6} md={4} lg={3} xl={2} className="mb-3 d-flex">
                                        <Card className="vinyl-card-recommendations">
                                            <Card.Img src={artist.url} />
-                                           <Card.Body>
+                                           <Card.Body typeof="mo:MusicGroup">
                                                <Card.Title className="text-light text-cart-title">
-                                                   <a href={artist.urlSpotify}>
-                                                       {artist.name}
+                                                   <a property="foaf:url" href={artist.urlSpotify}>
+                                                       <span property="foaf:name">{artist.name}</span>
                                                    </a>
                                                </Card.Title>
                                                <Card.Text className="text-secondary text-cart-body">
-                                                   {
-                                                       artist.genres
-                                                   }
+                                                   <span property="dc:genre">{artist.genres}</span>
                                                </Card.Text>
                                            </Card.Body>
                                        </Card>
@@ -356,16 +355,16 @@ export default function Recommendations() {
                                </div>
                                <div>
                                    <Button disabled={loadingButtonSpotify} onClick={ () => getSpotifyRecommendedSongs()}>
-                                       {loadingButtonSpotify &&
+                                       {loadingButtonSpotify ?
                                            <Spinner
                                                as="span"
                                                animation="border"
                                                size="sm"
                                                role="status"
                                                aria-hidden="true"
-                                           />
+                                           /> :
+                                            "Find"
                                        }
-                                       Find
                                    </Button>
                                </div>
                            </Col>
@@ -395,16 +394,16 @@ export default function Recommendations() {
                                </div>
                                <div>
                                    <Button disabled={loadingButtonFile} onClick={ () => getFileRecommendedSongs()}>
-                                       {loadingButtonFile &&
+                                       {loadingButtonFile ?
                                            <Spinner
                                                as="span"
                                                animation="border"
                                                size="sm"
                                                role="status"
                                                aria-hidden="true"
-                                           />
+                                           /> :
+                                           "Find"
                                        }
-                                       Find
                                    </Button>
                                </div>
                            </Col>
