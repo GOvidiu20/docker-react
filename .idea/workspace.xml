@@ -6,9 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="63b466c8-c417-4d27-9437-25ac20b63e67" name="Changes" comment="git deploy">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/view/pages/playlists/edit.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/view/pages/playlists/edit.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/view/pages/playlists/share.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/view/pages/playlists/share.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/view/pages/profile/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/view/pages/profile/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/view/pages/recommendations/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/view/pages/recommendations/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -127,7 +124,7 @@
       <workItem from="1706809808644" duration="3685000" />
       <workItem from="1706858288355" duration="2816000" />
       <workItem from="1706874187208" duration="15292000" />
-      <workItem from="1706946855316" duration="11524000" />
+      <workItem from="1706946855316" duration="13513000" />
     </task>
     <task id="LOCAL-00001" summary="git deploy">
       <option name="closed" value="true" />

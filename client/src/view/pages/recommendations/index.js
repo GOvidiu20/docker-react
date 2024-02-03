@@ -66,7 +66,7 @@ export default function Recommendations() {
                     'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 }),
             })
-                .then(respone => respone.json())
+                .then(response => response.json())
                 .then(data => {
                     let artists = [];
                     let genres = []
@@ -132,7 +132,6 @@ export default function Recommendations() {
                     .then(response => response.json())
                     .then(async data => {
                         if (data.length !== 0) {
-                            setTopSpotifyArtists(data);
                             let artists = [];
                             data.forEach(artist => {
                                 let genres = "";
@@ -146,6 +145,7 @@ export default function Recommendations() {
                                     'name' : artist.name
                                 })
                             })
+                            setTopSpotifyArtists(artists);
                         } else {
                             await fetch(process.env.REACT_APP_BACKEND_SERVER + '/api/artists/spotify/' + localStorage.getItem('userId'), {
                                 headers: new Headers({
@@ -221,13 +221,13 @@ export default function Recommendations() {
         let genres = [];
         topSpotifySongs && topSpotifySongs.map((song) => {
             song.artists.split(',').map((artist) => (
-                artists.push(artist.replace(/\s/g, ""))
+                artists.push(artist.trimStart())
             ))
         })
         topSpotifyArtists && topSpotifyArtists.map((artist) => {
             artists.push(artist.name);
-            artist.genres.map((genre) => (
-                genres.push(genre)
+            artist.genres.split(',').map((genre) => (
+                genres.push(genre.trimStart())
             ))
         })
         if (artists.length !== 0 || genres.length !== 0)
