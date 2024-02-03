@@ -26,9 +26,7 @@ export default function PlaylistChange() {
     const [playlistSongs, setPlaylistSongs] = useState([]);
     const [changeNameModal, setChangeNameModal] = useState(false);
     const [newPlaylistName, setNewPlaylistName] = useState();
-    const [newPlaylistCategory, setNewPlaylistCategory] = useState();
     const [errorNewNamePlaylist, setErrorNewNamePlaylist] = useState(false);
-    const [errorNewCategoryPlaylist, setErrorNewCategoryPlaylist] = useState(false);
     const navigate = useNavigate();
     const id = useParams()['id'];
 
@@ -71,13 +69,11 @@ export default function PlaylistChange() {
             loadPlaylist();
         else {
             setNewPlaylistName("New Playlist");
-            setNewPlaylistCategory("New Category");
         }
     }, [songs]);
 
     useEffect(() => {
         setNewPlaylistName(playlist.title);
-        setNewPlaylistCategory(playlist.category);
     }, [playlist]);
 
     const columns = [
@@ -91,7 +87,7 @@ export default function PlaylistChange() {
         },
         {
             name: 'Release date',
-            selector: row => Moment(row.release_date).format('d MMM Y'),
+            selector: row => new Intl.DateTimeFormat('en-US', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(row.date)),
         },
         {
             name: 'Actions',
@@ -169,16 +165,13 @@ export default function PlaylistChange() {
 
     function changePlaylistDetails() {
         setErrorNewNamePlaylist(newPlaylistName.trim() === '');
-        setErrorNewCategoryPlaylist(newPlaylistCategory.trim() === '');
-        if(newPlaylistName.trim() !== '' && newPlaylistCategory.trim() !== '') {
+        if(newPlaylistName.trim() !== '') {
             setPlaylist({
                 ...playlist,
                 title: newPlaylistName,
-                category: newPlaylistCategory
             });
 
             setErrorNewNamePlaylist(false);
-            setErrorNewCategoryPlaylist(false)
             setChangeNameModal(false);
         }
     }
@@ -187,10 +180,8 @@ export default function PlaylistChange() {
         setChangeNameModal(false);
         if(id) {
             setNewPlaylistName(playlist.title)
-            setNewPlaylistCategory(playlist.category)
         } else {
             setNewPlaylistName("New Playlist")
-            setNewPlaylistCategory("New Category")
         }
     }
 
@@ -214,7 +205,6 @@ export default function PlaylistChange() {
                         ? playlist
                         : {
                             title: newPlaylistName,
-                            category: newPlaylistCategory,
                             songIds: playlistSongs.map(song => song.id),
                             userIds: [localStorage.getItem('userId')],
                             createdDate: moment(),
@@ -295,16 +285,6 @@ export default function PlaylistChange() {
                                 />
                                 {errorNewNamePlaylist && <div className="text-danger">Name is required</div>}
                             </Form.Group>
-                            <Form.Group className="mb-3 text-light" controlId="category">
-                                <Form.Label>Category</Form.Label>
-                                <Form.Control
-                                    type = "text"
-                                    value = {newPlaylistCategory}
-                                    onChange={(e) => setNewPlaylistCategory(e.target.value)}
-                                    required
-                                />
-                                {errorNewCategoryPlaylist && <div className="text-danger">Category is required</div>}
-                            </Form.Group>
                         </Modal.Body>
                         <Modal.Footer className="modal-change-name-footer">
                             <Button variant_type='primary' onClick={() => changePlaylistDetails()}> Save </Button>
@@ -338,7 +318,7 @@ export default function PlaylistChange() {
                                         <Row className="d-flex justify-content-between align-items-center song-list mb-2">
                                             <Col xs={6}><span>{song.vinylLabel}</span></Col>
                                             <Col><span>{song.creator}</span></Col>
-                                            <Col><span>{Moment(song.release_date).format('d MMM Y')}</span></Col>
+                                            <Col><span>{new Intl.DateTimeFormat('en-US', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(song.date))}</span></Col>
                                             <Col className="d-flex justify-content-end">
                                                 <button className="button-classic" onClick={ () => addSongToPlaylist(song.id)}>
                                                     Add

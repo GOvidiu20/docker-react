@@ -8,7 +8,8 @@ import DisplayVinyl from "../../components/showSongs";
 export default function Recommendations() {
 
     const [songs, setSongs] = useState([]);
-    const [playlists, setPlaylists] = useState([]);
+    const [playlistsArtists, setPlaylistsArtists] = useState([]);
+    const [playlistsGenres, setPlaylistsGenres] = useState([]);
     const [topSpotifySongs, setTopSpotifySongs] = useState([])
     const [topSpotifyArtists, setTopSpotifyArtists] = useState([])
     const [spotifySavedAlbums, setSpotifySavedAlbums] = useState([])
@@ -16,19 +17,24 @@ export default function Recommendations() {
     const [sparkRecommendedSongs, setSparkRecommendedSongs] = useState([]);
     const [spotifyRecommendedSongs, setSpotifyRecommendedSongs] = useState([]);
     const [fileRecommendedSongs, setFileRecommendedSongs] = useState([]);
+    const [playlistsRecommendedSongs, setPlaylistsRecommendedSongs] = useState([]);
     const [file, setFile] = useState();
     const [loadingButtonText, setLoadingButtonText] = useState(false)
     const [loadingButtonSpotify, setLoadingButtonSpotify] = useState(false)
     const [loadingButtonFile, setLoadingButtonFile] = useState(false)
+    const [loadingButtonPlaylists, setLoadingButtonPlaylists] = useState(false)
 
     useEffect(() => {
-        // loadSongs();
-        // loadPlaylists();
+        loadSongs();
         loadSpotifySavedAlbums();
         loadTopSpotifyArtists();
         loadTopSpotifySongs();
-        verifyUserTokenAvailability();
+        // verifyUserTokenAvailability();
     }, []);
+
+    useEffect(() => {
+        loadPlaylists();
+    }, [songs]);
 
     const loadSongs = async () => {
         try {
@@ -38,7 +44,16 @@ export default function Recommendations() {
                 }),
             })
                 .then(response => response.json())
-                .then(data => setSongs(data))
+                .then(data =>{
+                    let songsData = [];
+                    data.forEach((song) => {
+                        songsData[song.id] = {
+                            'artist' : song.creator,
+                            'genre' : song.genre,
+                        }
+                    })
+                    setSongs(songsData)
+                })
         } catch (error) {
             console.error('Error fetching songs:', error);
         }
@@ -53,15 +68,17 @@ export default function Recommendations() {
             })
                 .then(respone => respone.json())
                 .then(data => {
-                    let newPlaylistOptions = [];
+                    let artists = [];
+                    let genres = []
                     data.forEach((playlist) => {
-                        let optionPlaylist = {
-                            value: playlist.id,
-                            label: playlist.title
-                        }
-                        newPlaylistOptions = [...newPlaylistOptions, optionPlaylist];
-                    });
-                    setPlaylists(newPlaylistOptions)
+                        playlist.songIds.forEach((songId) => {
+                            artists.push(songs[songId]['artist'])
+                            genres.push(songs[songId]['genre'])
+                        })
+                    })
+
+                    setPlaylistsArtists(artists);
+                    setPlaylistsGenres(genres)
                 })
         } catch (error) {
             console.error('Error fetching playlists:', error);
@@ -137,7 +154,6 @@ export default function Recommendations() {
                             }).then(response => response.json())
                               .then(data => {
                                   setTopSpotifyArtists(data);
-                                  console.log(data)
                               })
                         }
                     })
@@ -173,9 +189,6 @@ export default function Recommendations() {
                 }),
             })
             .then(response => response.json())
-            .then(data => {
-                console.log(data);
-            })
         } catch (error) {
             console.error('Error fetching user:', error);
         }
@@ -262,6 +275,30 @@ export default function Recommendations() {
         }
     }
 
+    async function getPlaylistRecommendedSongs(){
+        setLoadingButtonPlaylists(true);
+        if (playlistsArtists.length !== 0 || playlistsGenres.length !== 0)
+            try {
+                await fetch(process.env.REACT_APP_VINYL_RECOMMENDER + '/spotify',{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "artists" : playlistsArtists,
+                        "genres" : playlistsGenres,
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        setPlaylistsRecommendedSongs(data);
+                        setLoadingButtonPlaylists(false);
+                    })
+            } catch (error) {
+                console.error('Error fetching user:', error);
+                setLoadingButtonPlaylists(false);
+            }
+    }
     return (
        <CustomLayout>
            <Container className="mt-3 container-scrollable-recommender">
@@ -412,6 +449,36 @@ export default function Recommendations() {
                            {
                                fileRecommendedSongs &&
                                fileRecommendedSongs.map((song, index) => (
+                                   DisplayVinyl(song = {song})
+                               ))}
+                       </Row>
+                   </Tab>
+                   <Tab eventKey="playlists-recommendations" title="Your Playlists">
+                       <Row className='d-flex justify-content-center'>
+                           <Col xs={12} className="d-flex w-25">
+                               <div>
+                                   <label className="text-secondary fs-8">Find recommendation based on your playlists songs</label>
+                               </div>
+                               <div>
+                                   <Button disabled={loadingButtonPlaylists} onClick={ () => getPlaylistRecommendedSongs()}>
+                                       {loadingButtonPlaylists ?
+                                           <Spinner
+                                               as="span"
+                                               animation="border"
+                                               size="sm"
+                                               role="status"
+                                               aria-hidden="true"
+                                           /> :
+                                           "Find"
+                                       }
+                                   </Button>
+                               </div>
+                           </Col>
+                       </Row>
+                       <Row>
+                           {
+                               playlistsRecommendedSongs &&
+                               playlistsRecommendedSongs.map((song, index) => (
                                    DisplayVinyl(song = {song})
                                ))}
                        </Row>

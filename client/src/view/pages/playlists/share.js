@@ -48,7 +48,7 @@ export default function PlaylistShare() {
                 }),
             })
                 .then(response => response.text())
-                .then(data => { console.log(data); navigate('/playlists');})
+                .then(data => navigate('/playlists'))
         } catch (error) {
             console.error('Error fetching user:', error);
         }

@@ -33,7 +33,7 @@ export default function Profile() {
                 }),
             })
                 .then(response => response.json())
-                .then(data => {setUser(data); console.log(data);})
+                .then(data => setUser(data))
         } catch (error) {
             console.error('Error fetching user:', error);
         }
@@ -69,7 +69,7 @@ export default function Profile() {
             })
                 .then(response => {
                     if(response.status === 200)
-                        toast.success("Song added to playlist successfully!", {
+                        toast.success("Successfully updated Spotify token!", {
                             position: toast.POSITION.TOP_RIGHT,
                         });
                     else
@@ -98,7 +98,11 @@ export default function Profile() {
                 }),
             })
                 .then(response => response.json())
-                .then(data => console.log(data))
+                .then(data =>
+                    toast.success("Successfully updated user!", {
+                        position: toast.POSITION.TOP_RIGHT,
+                    })
+                )
         } catch (error) {
             console.error('Error fetching user:', error);
         }
