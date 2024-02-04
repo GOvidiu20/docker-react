@@ -33,7 +33,7 @@ export default function Playlists() {
                 }),
             })
                 .then(respone => respone.json())
-                .then(data => setPlaylists(data))
+                .then(data => {setPlaylists(data);console.log(data);})
         } catch (error) {
             console.error('Error fetching playlists:', error);
         }

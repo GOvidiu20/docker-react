@@ -105,6 +105,7 @@ export default function Home() {
     function selectSongButton(song) {
         setAddSongToPlaylistModal(true)
         setSelectedSong(song);
+        console.log(selectedSong);
     }
 
     return (
@@ -153,14 +154,14 @@ export default function Home() {
                >
                    <Modal.Header className="modal-change-name-header">
                        <Modal.Title>
-                           <div className="fs-4 fw-semibold text-light">{selectedSong && selectedSong.title}</div>
-                           <div className="fs-5 fw-light text-secondary">Author</div>
+                           <div className="fs-4 fw-semibold text-light">{selectedSong && selectedSong.vinylLabel}</div>
+                           <div className="fs-5 fw-light text-secondary">{selectedSong && selectedSong.creator}</div>
                        </Modal.Title>
                    </Modal.Header>
                    <Modal.Body className="modal-change-name-body">
                        <Row className="w-100 h-100">
                            <Col xs={4}>
-                               <img src="https://newjams-images.scdn.co/image/ab67647800003f8a/dt/v3/release-radar/ab6761610000e5eb6cab9e007b77913d63f12835/en" />
+                               <img src={selectedSong && selectedSong.discogs_image} />
                            </Col>
                            <Col xs={8}>
                                <Form.Group className="mb-3 text-light" controlId="title">
